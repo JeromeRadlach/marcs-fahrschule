@@ -117,7 +117,7 @@ function Header() {
       />
 
       <header
-        className={`bg-gradient-to-r from-primary to-primary-dark sticky top-0 z-50 transition-shadow duration-base ease-out-expo ${
+        className={`bg-gray-dark sticky top-0 z-50 transition-shadow duration-base ease-out-expo ${
           isCondensed ? 'shadow-xl backdrop-blur-sm' : 'shadow-md'
         }`}
       >
@@ -150,7 +150,7 @@ function Header() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  className="nav-link text-white hover:text-gray-200 font-medium rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+                  className="nav-link text-white hover:text-gray-200 font-medium rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-dark"
                 >
                   {item.name}
                 </NavLink>
