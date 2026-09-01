@@ -21,10 +21,11 @@ html {
    strokes and make small text look muddy.
 
    Note the stroke is centred on the glyph outline, so the fill covers its
-   inner half: the visible outline is half the value below. 2px reads as a 1px
-   border. */
+   inner half: the visible outline is half the value below. 6px reads as a 3px
+   border. Because paint-order repaints the fill over the stroke, the letter
+   shapes stay intact however thick this gets - the weight grows outward only. */
 body {
-  -webkit-text-stroke: 2px #000;
+  -webkit-text-stroke: 6px #000;
   paint-order: stroke fill;
 }
 
