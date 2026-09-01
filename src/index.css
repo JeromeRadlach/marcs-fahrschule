@@ -13,13 +13,17 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Thin black outline on all text.
+/* Black outline on all text.
 
    The page sits on the brand artwork, whose chrome centre is bright, so light
    text needs separating from it. paint-order draws the stroke behind the fill
    rather than centred on the glyph edge, which would otherwise eat into thin
-   strokes and make small text look muddy. */
+   strokes and make small text look muddy.
+
+   Note the stroke is centred on the glyph outline, so the fill covers its
+   inner half: the visible outline is half the value below. 2px reads as a 1px
+   border. */
 body {
-  -webkit-text-stroke: 0.5px #000;
+  -webkit-text-stroke: 2px #000;
   paint-order: stroke fill;
 }
