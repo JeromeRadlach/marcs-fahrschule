@@ -5,7 +5,7 @@
 /* Custom styles */
 body {
   margin: 0;
-  font-family: 'Inter', 'Open Sans', system-ui, sans-serif;
+  font-family: 'Barlow', system-ui, sans-serif;
 }
 
 /* Smooth scrolling */
@@ -26,4 +26,12 @@ html {
 body {
   -webkit-text-stroke: 2px #000;
   paint-order: stroke fill;
+}
+
+/* Oswald on headings, Barlow for everything else. Set here rather than as a
+   font-display class on each of the 43 heading tags across the pages.
+   Oswald is condensed, so a touch of tracking keeps the caps from crowding. */
+h1, h2, h3 {
+  font-family: 'Oswald', 'Barlow', system-ui, sans-serif;
+  letter-spacing: 0.01em;
 }

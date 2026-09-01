@@ -12,7 +12,8 @@ export default {
         'gray-dark': '#1f2937',
       },
       fontFamily: {
-        'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'sans': ['Barlow', 'system-ui', 'sans-serif'],
+        'display': ['Oswald', 'Barlow', 'system-ui', 'sans-serif'],
       },
     },
   },
