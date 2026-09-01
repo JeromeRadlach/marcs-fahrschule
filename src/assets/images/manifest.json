@@ -1,0 +1,133 @@
+{
+  "anhaenger": {
+    "width": 1024,
+    "height": 1024,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "honda-cb125r": {
+    "width": 1024,
+    "height": 1024,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "niu-scooter": {
+    "width": 1024,
+    "height": 1536,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "opel-grandland": {
+    "width": 1536,
+    "height": 1024,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "team-alex": {
+    "width": 768,
+    "height": 1024,
+    "widths": [
+      400
+    ]
+  },
+  "team-dany": {
+    "width": 1024,
+    "height": 1365,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "team-detlef": {
+    "width": 1024,
+    "height": 1365,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "team-ina": {
+    "width": 1024,
+    "height": 1365,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "team-jeronimo": {
+    "width": 1024,
+    "height": 1536,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "team-joerg": {
+    "width": 731,
+    "height": 1024,
+    "widths": [
+      400
+    ]
+  },
+  "team-marc": {
+    "width": 1024,
+    "height": 1365,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "team-nadja": {
+    "width": 1058,
+    "height": 1203,
+    "widths": [
+      400,
+      800
+    ]
+  },
+  "vw-golf-sportsvan": {
+    "width": 1536,
+    "height": 1024,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "vw-taigo": {
+    "width": 1536,
+    "height": 1024,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "vw-troc": {
+    "width": 1536,
+    "height": 1024,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "yamaha-mt07": {
+    "width": 1536,
+    "height": 1024,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  }
+}

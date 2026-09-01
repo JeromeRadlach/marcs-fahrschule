@@ -27,3 +27,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Image originals - large, only needed to regenerate src/assets/images
+assets-src

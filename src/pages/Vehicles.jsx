@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import { vehicles } from '../data/vehicles'
+import ResponsiveImage from '../components/ResponsiveImage'
 
 function Vehicles() {
   return (
@@ -23,8 +24,13 @@ function Vehicles() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {vehicles.filter(v => ['B', 'BE'].some(c => v.classes.includes(c))).map((vehicle) => (
               <div key={vehicle.id} className="bg-gray-dark rounded-lg overflow-hidden shadow-lg">
-                <div className="h-48 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">{vehicle.name}</span>
+                <div className="h-48 bg-gradient-to-br from-primary to-primary-dark">
+                  <ResponsiveImage
+                    slug={vehicle.image}
+                    alt={vehicle.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-white">{vehicle.name} ({vehicle.count}x)</h3>
@@ -40,8 +46,13 @@ function Vehicles() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {vehicles.filter(v => ['A', 'A1', 'A2', 'AM'].some(c => v.classes.includes(c))).map((vehicle) => (
               <div key={vehicle.id} className="bg-gray-dark rounded-lg overflow-hidden shadow-lg">
-                <div className="h-48 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">{vehicle.name}</span>
+                <div className="h-48 bg-gradient-to-br from-primary to-primary-dark">
+                  <ResponsiveImage
+                    slug={vehicle.image}
+                    alt={vehicle.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-white">{vehicle.name} ({vehicle.count}x)</h3>

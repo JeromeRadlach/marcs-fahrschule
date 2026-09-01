@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import { team, officeTeam } from '../data/team'
+import ResponsiveImage from '../components/ResponsiveImage'
 
 function Team() {
   return (
@@ -23,8 +24,13 @@ function Team() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {team.map((member) => (
               <div key={member.id} className="bg-gray-dark rounded-lg overflow-hidden shadow-lg text-center">
-                <div className="h-64 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">{member.name}</span>
+                <div className="h-64 bg-gradient-to-br from-primary to-primary-dark">
+                  <ResponsiveImage
+                    slug={member.image}
+                    alt={member.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
@@ -40,8 +46,13 @@ function Team() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {officeTeam.map((member) => (
               <div key={member.id} className="bg-gray-dark rounded-lg overflow-hidden shadow-lg text-center">
-                <div className="h-64 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">{member.name}</span>
+                <div className="h-64 bg-gradient-to-br from-primary to-primary-dark">
+                  <ResponsiveImage
+                    slug={member.image}
+                    alt={member.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>

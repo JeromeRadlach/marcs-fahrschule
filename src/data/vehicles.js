@@ -5,7 +5,8 @@ export const vehicles = [
     count: 2,
     transmission: 'Schalter',
     classes: ['B', 'BE'],
-    image: '/images/vw-taigo.jpg',
+    image: 'vw-taigo',
+    alt: 'Schwarzer VW Taigo der Fahrschule',
     description: 'Moderne Fahrzeuge für die Fahrtraining in Klasse B und BE'
   },
   {
@@ -14,7 +15,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Automatik',
     classes: ['B'],
-    image: '/images/vw-taigo-rline.jpg',
+    image: 'vw-taigo',
+    alt: 'Schwarzer VW Taigo R-Line der Fahrschule',
     description: 'Komfortables Automatikfahrzeug für B-Training'
   },
   {
@@ -23,7 +25,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schalter',
     classes: ['B'],
-    image: '/images/vw-golf-sportsvan.jpg',
+    image: 'vw-golf-sportsvan',
+    alt: 'Schwarzer VW Golf Sportsvan der Fahrschule',
     description: 'Bewährte Qualität für praktische Ausbildung'
   },
   {
@@ -32,7 +35,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schalter',
     classes: ['B'],
-    image: '/images/vw-troc.jpg',
+    image: 'vw-troc',
+    alt: 'Weißer VW T-Roc der Fahrschule',
     description: 'Moderne SUV-Alternative für das Fahrenlernen'
   },
   {
@@ -41,7 +45,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Automatik',
     classes: ['B'],
-    image: '/images/opel-grandland.jpg',
+    image: 'opel-grandland',
+    alt: 'Schwarzer Opel Grandland der Fahrschule',
     description: 'Spacieux Automatikfahrzeug für B-Training'
   },
   {
@@ -50,7 +55,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schaltung',
     classes: ['A'],
-    image: '/images/yamaha-mt07-a.jpg',
+    image: 'yamaha-mt07',
+    alt: 'Schwarze Yamaha MT-07 für die Klasse A',
     description: 'Leistungsstarker Motorradkurs für Klasse A (uneingeschränkt)'
   },
   {
@@ -59,7 +65,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schaltung',
     classes: ['A2'],
-    image: '/images/yamaha-mt07-a2.jpg',
+    image: 'yamaha-mt07',
+    alt: 'Schwarze Yamaha MT-07 für die Klasse A2',
     description: 'Kompakter Motorradkurs für Klasse A2 (eingeschränkt)'
   },
   {
@@ -68,7 +75,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schaltung',
     classes: ['A1', 'B196'],
-    image: '/images/honda-cb125r.jpg',
+    image: 'honda-cb125r',
+    alt: 'Honda CB 125 R der Fahrschule',
     description: 'Einsteigerfreundliches Motorrad für A1 und B196'
   },
   {
@@ -77,7 +85,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Automatik',
     classes: ['AM'],
-    image: '/images/niu-scooter.jpg',
+    image: 'niu-scooter',
+    alt: 'Schwarzer NIU Elektroroller der Fahrschule',
     description: 'Moderne Elektro-Roller für AM-Klasse'
   },
   {
@@ -86,7 +95,8 @@ export const vehicles = [
     count: 1,
     transmission: 'Schaltung',
     classes: ['BE', 'B96'],
-    image: '/images/anhaenger.jpg',
+    image: 'anhaenger',
+    alt: 'Anhänger mit schwarzer Plane für die Klassen BE und B96',
     description: 'Spezieller Anhänger für BE und B96 Prüfungsvorbereitung'
   }
 ]
