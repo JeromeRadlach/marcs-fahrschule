@@ -42,7 +42,7 @@ function Aufbauseminar() {
                 Das Seminar ist für alle Führerscheinklassen ab dem Lernfahrzeugführerberechtigung möglich.
               </p>
               <a
-                href="tel:02013194371"
+                href="tel:+492013194371"
                 className="bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-colors"
               >
                 📞 Jetzt Termin vereinbaren

@@ -20,7 +20,7 @@ function Footer() {
             Eure Zukunft beginnt hier! Professionelle Fahrtraining in Essen für alle Klassen.
           </p>
           <p className="text-white opacity-70 text-sm">
-            Reuenberg 83, 45357 Essen | Telefon: <a href="tel:02013194371" className="text-white hover:underline">0201/3194371</a>
+            Reuenberg 83, 45357 Essen | Telefon: <a href="tel:+492013194371" className="text-white hover:underline">0201/3194371</a>
           </p>
         </div>
 

@@ -1,51 +1,36 @@
 // Resolves an image slug to the responsive variants produced by
 // scripts/optimize-images.mjs (npm run images).
 //
-// Importing through Vite rather than referencing /images/... by string is
-// deliberate: Vite rewrites these URLs for the configured base path (the site
-// is served from /marcs-fahrschule/ on GitHub Pages) and content-hashes the
-// filenames for cache busting. A hardcoded absolute path would do neither.
+// The files live in public/images/ and are served as-is by Vite. Their URLs
+// are built from import.meta.env.BASE_URL rather than written as '/images/...'
+// literals: the site is served from /marcs-fahrschule/ on GitHub Pages, and
+// Vite does not rewrite path strings inside JS, so a root-absolute path would
+// 404 in both dev and production.
+//
+// The manifest is imported (not fetched) so intrinsic dimensions are available
+// synchronously on first render and the layout can reserve space immediately.
 
-import manifest from '../assets/images/manifest.json'
+import manifest from './image-manifest.json'
 
-const webpFiles = import.meta.glob('../assets/images/*.webp', { eager: true, import: 'default' })
-const jpegFiles = import.meta.glob('../assets/images/*.jpg', { eager: true, import: 'default' })
+// Vite guarantees BASE_URL has a trailing slash
+const base = import.meta.env.BASE_URL
 
-// '../assets/images/team-marc-800.webp' -> ['team-marc', 800]
-function parseKey(key) {
-  const match = /\/([^/]+)-(\d+)\.(?:webp|jpg)$/.exec(key)
-  return match ? [match[1], Number(match[2])] : null
-}
+const url = (slug, width, ext) => `${base}images/${slug}-${width}.${ext}`
 
-function buildSrcSet(files) {
-  const bySlug = {}
-  for (const [key, url] of Object.entries(files)) {
-    const parsed = parseKey(key)
-    if (!parsed) continue
-    const [slug, width] = parsed
-    ;(bySlug[slug] ||= []).push({ width, url })
-  }
-  for (const entries of Object.values(bySlug)) entries.sort((a, b) => a.width - b.width)
-  return bySlug
-}
-
-const webp = buildSrcSet(webpFiles)
-const jpeg = buildSrcSet(jpegFiles)
-
-const toSrcSet = (entries) => entries.map(e => `${e.url} ${e.width}w`).join(', ')
+const toSrcSet = (slug, widths, ext) =>
+  widths.map(width => `${url(slug, width, ext)} ${width}w`).join(', ')
 
 export function getImage(slug) {
-  const jpegEntries = jpeg[slug]
-  const webpEntries = webp[slug]
   const meta = manifest[slug]
+  if (!meta?.widths?.length) return null
 
-  if (!jpegEntries?.length || !meta) return null
+  const widest = meta.widths[meta.widths.length - 1]
 
   return {
     // Widest JPEG is the fallback for browsers that ignore srcset entirely
-    src: jpegEntries[jpegEntries.length - 1].url,
-    jpegSrcSet: toSrcSet(jpegEntries),
-    webpSrcSet: webpEntries?.length ? toSrcSet(webpEntries) : null,
+    src: url(slug, widest, 'jpg'),
+    jpegSrcSet: toSrcSet(slug, meta.widths, 'jpg'),
+    webpSrcSet: toSrcSet(slug, meta.widths, 'webp'),
     width: meta.width,
     height: meta.height
   }

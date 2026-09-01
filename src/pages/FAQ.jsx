@@ -27,7 +27,7 @@ function FAQ() {
 
             <div className="mt-12 text-center bg-primary text-white p-6 rounded-lg">
               <p className="text-lg mb-4">Haben Sie weitere Fragen?</p>
-              <a href="tel:02013194371" className="text-white hover:underline font-bold">
+              <a href="tel:+492013194371" className="text-white hover:underline font-bold">
                 📞 0201/3194371
               </a>
             </div>

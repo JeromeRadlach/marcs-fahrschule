@@ -54,7 +54,14 @@ function Datenschutz() {
                 <li>Einschränkung der Datenverarbeitung</li>
                 <li>Datenübertragbarkeit</li>
                 <li>Widerspruch gegen die Datenverarbeitung</li>
+                <li>Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO)</li>
               </ul>
+              <p className="mt-4">
+                Die für uns zuständige Aufsichtsbehörde ist die Landesbeauftragte für Datenschutz
+                und Informationsfreiheit Nordrhein-Westfalen, Postfach 20 04 44, 40102 Düsseldorf,
+                Telefon 0211 38424-0, E-Mail{' '}
+                <a href="mailto:poststelle@ldi.nrw.de" className="text-primary hover:underline">poststelle@ldi.nrw.de</a>.
+              </p>
             </div>
 
             <div>

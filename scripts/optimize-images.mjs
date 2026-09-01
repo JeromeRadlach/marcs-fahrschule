@@ -1,5 +1,8 @@
 // Generates responsive WebP + JPEG variants from the originals in assets-src/.
 //
+// Images are written to public/images/ and served statically; the manifest of
+// intrinsic dimensions is written into src/ so it can be imported.
+//
 // Originals are not committed (see .gitignore) - they are large and only needed
 // to regenerate. Keep a backup outside the repo.
 //
@@ -10,7 +13,8 @@ import { readdir, mkdir, writeFile, stat } from 'node:fs/promises'
 import { join, parse } from 'node:path'
 
 const SRC = 'assets-src'
-const OUT = 'src/assets/images'
+const OUT = 'public/images'
+const MANIFEST = 'src/lib/image-manifest.json'
 const WIDTHS = [400, 800, 1200, 1600]
 const SOURCE_EXT = new Set(['.jpg', '.jpeg', '.png'])
 
@@ -64,7 +68,9 @@ async function main() {
     console.log(`${slug.padEnd(20)} ${String(meta.width).padStart(5)}x${String(meta.height).padEnd(5)} -> ${emitted.join(', ')}`)
   }
 
-  await writeFile(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
+  // Manifest lives in src/ so it can be imported and bundled; the images
+  // themselves are served statically from public/
+  await writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + '\n')
 
   console.log(`\n${files.length} sources ${kb(sourceBytes)}KB -> ${kb(outputBytes)}KB across ${WIDTHS.length} widths in 2 formats`)
 }

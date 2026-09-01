@@ -51,7 +51,7 @@ function Contact() {
 
                 <div>
                   <h3 className="font-bold text-white">Telefon</h3>
-                  <a href="tel:02013194371" className="text-primary hover:underline text-lg font-bold">
+                  <a href="tel:+492013194371" className="text-primary hover:underline text-lg font-bold">
                     0201/3194371
                   </a>
                 </div>

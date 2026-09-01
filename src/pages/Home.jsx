@@ -35,7 +35,7 @@ function Home() {
                   Jetzt Anfrage senden
                 </Link>
                 <a
-                  href="tel:02013194371"
+                  href="tel:+492013194371"
                   className="border border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-lg transition-colors"
                 >
                   📞 0201/3194371
