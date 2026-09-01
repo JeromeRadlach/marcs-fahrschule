@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import { getImage } from '../lib/images'
 
 // Renders a slug from src/assets/images as a responsive picture element.
@@ -5,8 +6,22 @@ import { getImage } from '../lib/images'
 // width/height come from the manifest and are always set: the source photos
 // have inconsistent aspect ratios (portrait scooter, square trailer, 3:2 cars),
 // so without them the grid reflows as each image loads.
+//
+// Photos fade up over the orange gradient placeholder behind them rather than
+// snapping in as they decode, which on a slow connection makes the grid
+// visibly flicker into place.
 function ResponsiveImage({ slug, alt, sizes = '100vw', className = '' }) {
   const image = getImage(slug)
+  const imgRef = useRef(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  // A cached image can already be decoded by the time React attaches the
+  // handler, in which case load never fires and the photo would stay at zero
+  // opacity forever. Checking complete on mount covers that; useLayoutEffect
+  // runs it before paint so the correct state is the first thing drawn.
+  useLayoutEffect(() => {
+    if (imgRef.current?.complete) setIsLoaded(true)
+  }, [slug])
 
   if (!image) return null
 
@@ -16,6 +31,7 @@ function ResponsiveImage({ slug, alt, sizes = '100vw', className = '' }) {
         <source type="image/webp" srcSet={image.webpSrcSet} sizes={sizes} />
       )}
       <img
+        ref={imgRef}
         src={image.src}
         srcSet={image.jpegSrcSet}
         sizes={sizes}
@@ -24,7 +40,12 @@ function ResponsiveImage({ slug, alt, sizes = '100vw', className = '' }) {
         height={image.height}
         loading="lazy"
         decoding="async"
-        className={className}
+        onLoad={() => setIsLoaded(true)}
+        // A decode failure must not leave a permanently invisible element, so
+        // an error counts as loaded and reveals whatever the browser shows.
+        onError={() => setIsLoaded(true)}
+        data-loaded={isLoaded ? 'true' : 'false'}
+        className={`img-fade ${className}`}
       />
     </picture>
   )

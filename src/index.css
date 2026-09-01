@@ -36,3 +36,225 @@ h1, h2, h3 {
   font-family: 'Oswald', 'Barlow', system-ui, sans-serif;
   letter-spacing: 0.01em;
 }
+
+/* ---------------------------------------------------------------------------
+   Motion system
+
+   The CSS half of src/lib/motion.js. Durations and curves are duplicated here
+   as custom properties because CSS transitions cannot read the JS module;
+   changing one means changing the other.
+
+   Everything below animates transform, opacity, box-shadow or colour only, so
+   it stays off the layout path. The two deliberate exceptions - the accordion
+   panel height and the header condense - are animated by their own components
+   and are short and isolated.
+--------------------------------------------------------------------------- */
+
+:root {
+  --duration-instant: 120ms;
+  --duration-fast: 200ms;
+  --duration-base: 320ms;
+  --duration-slow: 500ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --lift-sm: -2px;
+  --lift-md: -4px;
+}
+
+@layer components {
+  /* Primary and secondary calls to action.
+
+     Hover lifts the button and adds an orange glow; press returns it to rest
+     and takes 3% off the scale, so a click always reports back even when the
+     navigation that follows is instant.
+
+     The lift is behind @media (hover: hover) because a touch device that
+     applies :hover on tap leaves the button stuck in the lifted state until
+     something else is tapped. :active is not guarded - press feedback is
+     exactly what a touch device should get.
+
+     The element must not be display: inline. A transform has no effect on a
+     non-replaced inline box, so a plain <a> silently gets no lift and no
+     press. Buttons and flex or grid children are already fine; a link that is
+     none of those needs inline-block adding alongside this class. The class
+     cannot set display itself - it would break .btn-motion elements that are
+     deliberately flex, such as the back-to-top control. */
+  .btn-motion {
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .btn-motion:hover {
+      transform: translateY(var(--lift-sm));
+      box-shadow: 0 8px 24px -8px rgb(255 107 0 / 0.55);
+    }
+  }
+
+  .btn-motion:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: var(--duration-instant);
+  }
+
+  /* Cards in the team and vehicle grids.
+
+     The media wrapper is a fixed-size mask; the image inside scales past it on
+     hover so the card's footprint never changes and nothing around it reflows. */
+  .card-motion {
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .card-motion__media {
+    overflow: hidden;
+  }
+
+  .card-motion__media img {
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .card-motion:hover {
+      transform: translateY(var(--lift-md));
+      box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.7);
+    }
+
+    .card-motion:hover .card-motion__media img {
+      transform: scale(1.04);
+    }
+  }
+
+  /* Header navigation.
+
+     The underline grows from the centre on hover and stays put on the active
+     route. It is a pseudo-element rather than a border so that showing it does
+     not change the link's height, which a border-bottom would. */
+  .nav-link {
+    position: relative;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .nav-link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  /* Form fields. The ring is drawn with box-shadow rather than outline so it
+     can animate; outline-width is not interpolatable in every engine. */
+  .input-motion {
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .input-motion:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #ff6b00;
+  }
+
+  /* Photos fade up over the orange gradient placeholder already sitting behind
+     them, instead of snapping in the moment they decode.
+
+     The starting opacity is applied only once JS has marked the element, so an
+     image that is already in cache when the component mounts - or a session
+     where the script never runs - is never left invisible. */
+  .img-fade[data-loaded='false'] {
+    opacity: 0;
+  }
+
+  .img-fade[data-loaded] {
+    transition: opacity var(--duration-base) var(--ease-out);
+  }
+
+  .img-fade[data-loaded='true'] {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+
+   A blanket safety net: anything that animates anywhere, including effects
+   added later that forget to check, collapses to effectively instant. The
+   JS side additionally skips mounting scroll observers entirely, so revealed
+   content renders visible rather than fading in fast.
+
+   Colour still transitions - it is 120ms and carries no movement, and killing
+   it makes hover states snap in a way that reads as harsher, not gentler.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn-motion,
+  .card-motion,
+  .input-motion {
+    transition:
+      background-color var(--duration-instant) linear,
+      color var(--duration-instant) linear,
+      border-color var(--duration-instant) linear,
+      box-shadow var(--duration-instant) linear !important;
+  }
+
+  .btn-motion:hover,
+  .btn-motion:active,
+  .card-motion:hover {
+    transform: none !important;
+  }
+
+  .card-motion:hover .card-motion__media img {
+    transform: none !important;
+  }
+
+  .img-fade[data-loaded='false'] {
+    opacity: 1;
+  }
+
+  /* Loading indicators are exempt from the reset above.
+
+     animation-iteration-count: 1 would stop the submit spinner dead after a
+     single turn, leaving a frozen spinner on screen for the whole request -
+     which reads as a hung page rather than as a calm one. A spinner is a
+     small, local, non-vestibular indicator, so it keeps running; it is just
+     slowed down. The button also says "Wird gesendet..." in text, so the
+     state is never carried by the motion alone. */
+  .animate-spin {
+    animation: spin 1.5s linear infinite !important;
+  }
+}

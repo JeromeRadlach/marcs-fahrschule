@@ -51,7 +51,14 @@ function Contact() {
 
                 <div>
                   <h3 className="font-bold text-white">Telefon</h3>
-                  <a href="tel:+492013194371" className="text-primary hover:underline text-lg font-bold">
+                  {/*
+                    The primary conversion action on this page. It gets a
+                    brighten on hover rather than .btn-motion: a lift and glow
+                    on a run of inline text detaches it from the line it sits
+                    on. brightness keeps the brand orange instead of
+                    introducing a second one.
+                  */}
+                  <a href="tel:+492013194371" className="text-primary hover:underline hover:brightness-110 transition duration-fast ease-out-expo text-lg font-bold">
                     0201/3194371
                   </a>
                 </div>
