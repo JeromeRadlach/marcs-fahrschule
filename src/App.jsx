@@ -26,15 +26,25 @@ function App() {
             of showing as a box. background-size: contain keeps the whole emblem
             visible at any viewport shape.
 
+            Two layers: the artwork centred on top, and a grain tile lifted from
+            the artwork's own backdrop repeating underneath it. Flat #000 around
+            the edges would not match - the source backdrop is faintly dithered,
+            so the join would show as a clean rectangle against speckle.
+
             aria-hidden and pointer-events-none keep it out of the accessibility
             tree and out of the way of clicks.
           */}
           <div
             aria-hidden="true"
-            className="pointer-events-none fixed inset-0 z-0 bg-black bg-center bg-no-repeat"
+            className="pointer-events-none fixed inset-0 z-0 bg-black"
             style={{
-              backgroundImage: `url(${import.meta.env.BASE_URL}images/background-1400.webp)`,
-              backgroundSize: 'contain'
+              backgroundImage: [
+                `url(${import.meta.env.BASE_URL}images/background-1400.webp)`,
+                `url(${import.meta.env.BASE_URL}images/background-grain.png)`
+              ].join(', '),
+              backgroundPosition: 'center, center',
+              backgroundSize: 'contain, auto',
+              backgroundRepeat: 'no-repeat, repeat'
             }}
           />
 

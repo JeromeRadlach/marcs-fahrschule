@@ -34,6 +34,34 @@ const OVERRIDES = new Map([
 
 const kb = (bytes) => Math.round(bytes / 1024)
 
+// The background art is shown with background-size: contain, so the area
+// around it would be flat #000 while the artwork's own backdrop carries a
+// faint dither grain - the join between the two is visible. Lift a clean
+// patch of that grain (a corner, clear of the emblem) and emit it as a small
+// repeating tile so the surround matches.
+//
+// PNG, not WebP: the grain sits only a few levels above black and lossy
+// compression flattens it straight back to pure black.
+const GRAIN_SOURCE = 'background.gif'
+const GRAIN = { left: 464, top: 464, size: 96 }
+
+async function writeGrainTile() {
+  const input = join(SRC, GRAIN_SOURCE)
+  try {
+    await stat(input)
+  } catch {
+    return
+  }
+
+  const out = join(OUT, 'background-grain.png')
+  await sharp(input)
+    .extract({ left: GRAIN.left, top: GRAIN.top, width: GRAIN.size, height: GRAIN.size })
+    .png({ compressionLevel: 9 })
+    .toFile(out)
+
+  console.log(`grain tile           ${GRAIN.size}x${GRAIN.size} -> ${kb((await stat(out)).size)}KB`)
+}
+
 async function main() {
   await mkdir(OUT, { recursive: true })
 
@@ -94,6 +122,8 @@ async function main() {
 
   // Manifest lives in src/ so it can be imported and bundled; the images
   // themselves are served statically from public/
+  await writeGrainTile()
+
   await writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + '\n')
 
   console.log(`\n${files.length} sources ${kb(sourceBytes)}KB -> ${kb(outputBytes)}KB across ${WIDTHS.length} widths in 2 formats`)
