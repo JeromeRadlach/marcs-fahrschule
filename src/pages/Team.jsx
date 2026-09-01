@@ -10,7 +10,7 @@ function Team() {
         <meta name="description" content="Lernen Sie unser Team kennen. Erfahrene Fahrlehrer und freundliches Büroteam für Ihre Fahrtraining." />
       </Helmet>
 
-      <section className="py-16 bg-dark-gray">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold text-center mb-4 text-white">
             Unser Team

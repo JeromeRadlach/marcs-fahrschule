@@ -16,6 +16,13 @@ const SRC = 'assets-src'
 const OUT = 'public/images'
 const MANIFEST = 'src/lib/image-manifest.json'
 const WIDTHS = [400, 800, 1200, 1600]
+
+// Slugs whose alpha channel must survive. These are emitted as WebP only:
+// JPEG has no transparency and would flatten the cut-out to a black box, and
+// a PNG fallback is dead weight - every browser that runs this app supports
+// WebP. They are decorative backgrounds rendered at very low opacity, so one
+// modest width and aggressive compression are more than enough.
+const TRANSPARENT = new Map([['emblem', [900]]])
 const SOURCE_EXT = new Set(['.jpg', '.jpeg', '.png'])
 
 const kb = (bytes) => Math.round(bytes / 1024)
@@ -48,17 +55,25 @@ async function main() {
     const widths = WIDTHS.filter(w => w <= meta.width)
     if (widths.length === 0) widths.push(meta.width)
 
+    const keepsAlpha = TRANSPARENT.has(slug)
+    const targetWidths = keepsAlpha ? TRANSPARENT.get(slug).filter(w => w <= meta.width) : widths
+
     const emitted = []
-    for (const width of widths) {
+    for (const width of targetWidths) {
       const resized = () => sharp(input).rotate().resize({ width, withoutEnlargement: true })
 
       const webpPath = join(OUT, `${slug}-${width}.webp`)
-      await resized().webp({ quality: 78 }).toFile(webpPath)
+      await resized()
+        .webp(keepsAlpha ? { quality: 45, alphaQuality: 60 } : { quality: 78 })
+        .toFile(webpPath)
+      outputBytes += (await stat(webpPath)).size
 
-      const jpegPath = join(OUT, `${slug}-${width}.jpg`)
-      await resized().jpeg({ quality: 80, mozjpeg: true, progressive: true }).toFile(jpegPath)
+      if (!keepsAlpha) {
+        const jpegPath = join(OUT, `${slug}-${width}.jpg`)
+        await resized().jpeg({ quality: 80, mozjpeg: true, progressive: true }).toFile(jpegPath)
+        outputBytes += (await stat(jpegPath)).size
+      }
 
-      outputBytes += (await stat(webpPath)).size + (await stat(jpegPath)).size
       emitted.push(width)
     }
 
