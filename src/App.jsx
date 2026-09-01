@@ -79,7 +79,13 @@ function App() {
       */}
       <LazyMotion features={domAnimation} strict>
         <MotionConfig reducedMotion="user">
-          <Router basename="/marcs-fahrschule">
+          {/*
+            Derived from Vite's base rather than hardcoded, so a build for the
+            domain root and a build for the GitHub Pages subpath both route
+            correctly. React Router trims the trailing slash that BASE_URL
+            carries, and a base of "/" leaves the basename empty.
+          */}
+          <Router basename={import.meta.env.BASE_URL}>
             <ScrollToTop />
             <div className="relative min-h-screen bg-dark-gray text-white">
               {/*

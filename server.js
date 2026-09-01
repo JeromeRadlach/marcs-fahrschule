@@ -10,6 +10,25 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 3001
 
+// Security: proxy trust, for the rate limiter's benefit.
+//
+// Behind a reverse proxy (see deploy/nginx.conf) every request reaches Express
+// from 127.0.0.1, so the per-IP rate limit below would put every visitor in one
+// bucket: a single person could lock the contact form for everybody, and the
+// audit log would record the proxy instead of the sender. Trusting the proxy
+// makes req.ip the real client address taken from X-Forwarded-For.
+//
+// Opt-in rather than on by default, because that header is supplied by the
+// client. A server reachable directly from the internet that trusts it lets
+// anyone forge their address and walk straight past the limit. Set TRUST_PROXY
+// to the number of proxies actually in front of this process - 1 for the nginx
+// block in deploy/nginx.conf - and leave it unset when running the API
+// directly, including local development.
+const trustProxy = Number.parseInt(process.env.TRUST_PROXY ?? '', 10)
+if (Number.isInteger(trustProxy) && trustProxy > 0) {
+  app.set('trust proxy', trustProxy)
+}
+
 // Security: Configure CORS with origin whitelist
 const corsOptions = {
   origin: [
@@ -117,4 +136,7 @@ app.post('/api/contact', contactRateLimit, async (req, res) => {
 app.listen(port, () => {
   console.log('Server running on port ' + port)
   console.log('Rate limit: ' + rateLimitMax + ' requests per ' + (rateLimitWindowMs / 1000) + 's per IP')
+  console.log('Proxy trust: ' + (app.get('trust proxy')
+    ? trustProxy + ' hop(s), client IP read from X-Forwarded-For'
+    : 'disabled, client IP read from the socket'))
 })
