@@ -100,7 +100,7 @@ function Contact() {
       <section className="py-8 bg-gray-dark">
         <div className="container mx-auto px-4">
           <iframe 
-            title="Marc's Fahrschule Location Map"
+            title="Standort von Marc's Fahrschule auf Google Maps"
             src={mapEmbedUrl}
             width="100%" 
             height="400" 

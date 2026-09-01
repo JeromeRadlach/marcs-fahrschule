@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { getRateLimitConfig, getClientIp, checkRateLimit } from '../lib/rateLimit.js'
 
 // Security: HTML sanitization - prevents XSS in emails
 function escapeHtml(str) {
@@ -28,18 +29,34 @@ const recipientEmail = process.env.RECIPIENT_EMAIL
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
+    return res.status(405).json({ message: 'Methode nicht erlaubt' })
+  }
+
+  // Security: Rate limiting per client IP
+  const rateLimitConfig = getRateLimitConfig()
+  const clientIp = getClientIp(req)
+  const rateLimitResult = checkRateLimit(clientIp, rateLimitConfig)
+
+  res.setHeader('RateLimit-Limit', rateLimitConfig.max)
+  res.setHeader('RateLimit-Remaining', rateLimitResult.remaining)
+
+  console.log('[AUDIT] Contact form request from ' + clientIp + ' at ' + new Date().toISOString())
+
+  if (!rateLimitResult.allowed) {
+    res.setHeader('Retry-After', rateLimitResult.retryAfterSeconds)
+    console.warn('[AUDIT] Rate limit exceeded for ' + clientIp)
+    return res.status(429).json({ message: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' })
   }
 
   const { name, email, phone, message, licenseClass } = req.body
 
   // Security: Input length validation
   const maxLength = 500
-  if (name && name.length > maxLength) return res.status(400).json({ message: 'Name too long' })
-  if (email && email.length > maxLength) return res.status(400).json({ message: 'Email too long' })
-  if (phone && phone.length > maxLength) return res.status(400).json({ message: 'Phone too long' })
-  if (message && message.length > maxLength) return res.status(400).json({ message: 'Message too long' })
-  if (licenseClass && licenseClass.length > maxLength) return res.status(400).json({ message: 'License class too long' })
+  if (name && name.length > maxLength) return res.status(400).json({ message: 'Der Name ist zu lang' })
+  if (email && email.length > maxLength) return res.status(400).json({ message: 'Die E-Mail-Adresse ist zu lang' })
+  if (phone && phone.length > maxLength) return res.status(400).json({ message: 'Die Telefonnummer ist zu lang' })
+  if (message && message.length > maxLength) return res.status(400).json({ message: 'Die Nachricht ist zu lang' })
+  if (licenseClass && licenseClass.length > maxLength) return res.status(400).json({ message: 'Die gewünschte Klasse ist zu lang' })
 
   const mailOptions = {
     from: email,
@@ -60,7 +77,7 @@ export default async function handler(req, res) {
     await transporter.sendMail(mailOptions)
     res.status(200).json({ message: 'E-Mail erfolgreich gesendet' })
   } catch (error) {
-    console.log('[ERROR] Email sending failed - check logs for details')
+    console.error('[ERROR] Email sending failed:', error?.message ?? error)
     res.status(500).json({ message: 'Fehler beim Senden der E-Mail' })
   }
 }

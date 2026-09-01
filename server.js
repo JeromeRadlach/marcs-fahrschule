@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
+import { getRateLimitConfig } from './lib/rateLimit.js'
 
 dotenv.config()
 
@@ -24,11 +25,15 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 
-// Security: Rate limiting - 5 requests per minute per IP
+// Security: Rate limiting - configurable via RATE_LIMIT_WINDOW_MS / RATE_LIMIT_MAX
+// Shared with the serverless handler in api/contact.js so both behave the same.
+// Read after dotenv.config() above, so values from .env are picked up.
+const { windowMs: rateLimitWindowMs, max: rateLimitMax } = getRateLimitConfig()
+
 const contactRateLimit = rateLimit({
-  windowMs: 60 * 1000,
-  max: 5,
-  message: { message: 'Too many requests. Please try again later.' },
+  windowMs: rateLimitWindowMs,
+  max: rateLimitMax,
+  message: { message: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
   standardHeaders: true,
   legacyHeaders: false
 })
@@ -69,11 +74,11 @@ app.post('/api/contact', contactRateLimit, async (req, res) => {
 
   // Security: Input length validation
   const maxLength = 500
-  if (name && name.length > maxLength) return res.status(400).json({ message: 'Name too long' })
-  if (email && email.length > maxLength) return res.status(400).json({ message: 'Email too long' })
-  if (phone && phone.length > maxLength) return res.status(400).json({ message: 'Phone too long' })
-  if (message && message.length > maxLength) return res.status(400).json({ message: 'Message too long' })
-  if (licenseClass && licenseClass.length > maxLength) return res.status(400).json({ message: 'License class too long' })
+  if (name && name.length > maxLength) return res.status(400).json({ message: 'Der Name ist zu lang' })
+  if (email && email.length > maxLength) return res.status(400).json({ message: 'Die E-Mail-Adresse ist zu lang' })
+  if (phone && phone.length > maxLength) return res.status(400).json({ message: 'Die Telefonnummer ist zu lang' })
+  if (message && message.length > maxLength) return res.status(400).json({ message: 'Die Nachricht ist zu lang' })
+  if (licenseClass && licenseClass.length > maxLength) return res.status(400).json({ message: 'Die gewünschte Klasse ist zu lang' })
 
   const recipientEmail = process.env.RECIPIENT_EMAIL
 
@@ -104,11 +109,12 @@ app.post('/api/contact', contactRateLimit, async (req, res) => {
     console.log('[AUDIT] Email sent successfully to ' + recipientEmail)
     res.status(200).json({ message: 'E-Mail erfolgreich gesendet' })
   } catch (error) {
-    console.log('[ERROR] Email sending failed - check logs for details')
+    console.error('[ERROR] Email sending failed:', error?.message ?? error)
     res.status(500).json({ message: 'Fehler beim Senden der E-Mail' })
   }
 })
 
 app.listen(port, () => {
   console.log('Server running on port ' + port)
+  console.log('Rate limit: ' + rateLimitMax + ' requests per ' + (rateLimitWindowMs / 1000) + 's per IP')
 })
