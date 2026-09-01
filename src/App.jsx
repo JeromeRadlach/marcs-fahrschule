@@ -17,18 +17,24 @@ function App() {
       <Router basename="/marcs-fahrschule">
         <div className="relative min-h-screen bg-dark-gray text-white">
           {/*
-            Decorative brand watermark. Fixed so it stays put while the page
-            scrolls, and behind the content layer below rather than behind the
-            wrapper's own background, which would hide it entirely. Very low
-            opacity keeps body text legible; aria-hidden and pointer-events-none
-            keep it out of the accessibility tree and out of the way of clicks.
+            Brand background, shown at full opacity. Fixed so it stays put while
+            the page scrolls, and sitting above the wrapper's own background
+            rather than behind it, which would hide it entirely.
+
+            The backdrop is black because the source artwork is an opaque black
+            square: matching it means the edges of the image disappear instead
+            of showing as a box. background-size: contain keeps the whole emblem
+            visible at any viewport shape.
+
+            aria-hidden and pointer-events-none keep it out of the accessibility
+            tree and out of the way of clicks.
           */}
           <div
             aria-hidden="true"
-            className="pointer-events-none fixed inset-0 z-0 bg-center bg-no-repeat opacity-[0.07]"
+            className="pointer-events-none fixed inset-0 z-0 bg-black bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${import.meta.env.BASE_URL}images/emblem-900.webp)`,
-              backgroundSize: 'min(80vw, 620px)'
+              backgroundImage: `url(${import.meta.env.BASE_URL}images/background-1400.webp)`,
+              backgroundSize: 'contain'
             }}
           />
 

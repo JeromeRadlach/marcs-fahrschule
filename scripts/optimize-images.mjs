@@ -17,13 +17,20 @@ const OUT = 'public/images'
 const MANIFEST = 'src/lib/image-manifest.json'
 const WIDTHS = [400, 800, 1200, 1600]
 
-// Slugs whose alpha channel must survive. These are emitted as WebP only:
-// JPEG has no transparency and would flatten the cut-out to a black box, and
-// a PNG fallback is dead weight - every browser that runs this app supports
-// WebP. They are decorative backgrounds rendered at very low opacity, so one
-// modest width and aggressive compression are more than enough.
-const TRANSPARENT = new Map([['emblem', [900]]])
-const SOURCE_EXT = new Set(['.jpg', '.jpeg', '.png'])
+const SOURCE_EXT = new Set(['.jpg', '.jpeg', '.png', '.gif'])
+
+// Per-slug overrides for assets that are not ordinary photos.
+//   widths   exact widths to emit instead of the responsive ladder
+//   upscale  allow enlarging past the source
+//   webpOnly skip the JPEG fallback where nothing consumes it
+//   quality  WebP quality override
+//
+// The page background is a still frame of a 560x560 animated GIF (sharp reads
+// frame one of a GIF by default) shown far larger than its native size, so it
+// is deliberately upscaled with a lanczos kernel.
+const OVERRIDES = new Map([
+  ['background', { widths: [1400], upscale: true, webpOnly: true, quality: 82 }]
+])
 
 const kb = (bytes) => Math.round(bytes / 1024)
 
@@ -55,20 +62,22 @@ async function main() {
     const widths = WIDTHS.filter(w => w <= meta.width)
     if (widths.length === 0) widths.push(meta.width)
 
-    const keepsAlpha = TRANSPARENT.has(slug)
-    const targetWidths = keepsAlpha ? TRANSPARENT.get(slug).filter(w => w <= meta.width) : widths
+    const override = OVERRIDES.get(slug)
+    const targetWidths = override?.widths ?? widths
 
     const emitted = []
     for (const width of targetWidths) {
-      const resized = () => sharp(input).rotate().resize({ width, withoutEnlargement: true })
+      const resized = () => sharp(input).rotate().resize({
+        width,
+        withoutEnlargement: !override?.upscale,
+        kernel: 'lanczos3'
+      })
 
       const webpPath = join(OUT, `${slug}-${width}.webp`)
-      await resized()
-        .webp(keepsAlpha ? { quality: 45, alphaQuality: 60 } : { quality: 78 })
-        .toFile(webpPath)
+      await resized().webp({ quality: override?.quality ?? 78 }).toFile(webpPath)
       outputBytes += (await stat(webpPath)).size
 
-      if (!keepsAlpha) {
+      if (!override?.webpOnly) {
         const jpegPath = join(OUT, `${slug}-${width}.jpg`)
         await resized().jpeg({ quality: 80, mozjpeg: true, progressive: true }).toFile(jpegPath)
         outputBytes += (await stat(jpegPath)).size
