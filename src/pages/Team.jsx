@@ -4,19 +4,6 @@ import { team, officeTeam } from '../data/team'
 import ZoomableImage from '../components/ZoomableImage'
 import { useEntrance, useReveal } from '../lib/motion'
 
-// The card's text block, rendered both inside the grid card and inside the
-// enlarged view the photo opens. Sharing it is what keeps the enlarged card an
-// enlarged card rather than a second description that can drift out of step.
-function MemberDetails({ member }) {
-  return (
-    <>
-      <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
-      <p className="text-primary font-medium mb-3">{member.role}</p>
-      <p className="text-gray-300 text-sm">{member.description}</p>
-    </>
-  )
-}
-
 function Team() {
   // The heading and lead sit above the fold, so they animate on mount rather
   // than waiting for a scroll trigger that has already passed.
@@ -60,13 +47,15 @@ function Team() {
                     <ZoomableImage
                       slug={member.image}
                       alt={member.alt}
-                      caption={<div className="text-center"><MemberDetails member={member} /></div>}
+                      title={member.name}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="p-6">
-                    <MemberDetails member={member} />
+                    <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
+                    <p className="text-primary font-medium mb-3">{member.role}</p>
+                    <p className="text-gray-300 text-sm">{member.description}</p>
                   </div>
                 </m.div>
               ))}
@@ -87,13 +76,15 @@ function Team() {
                     <ZoomableImage
                       slug={member.image}
                       alt={member.alt}
-                      caption={<div className="text-center"><MemberDetails member={member} /></div>}
+                      title={member.name}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="p-6">
-                    <MemberDetails member={member} />
+                    <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
+                    <p className="text-primary font-medium mb-3">{member.role}</p>
+                    <p className="text-gray-300 text-sm">{member.description}</p>
                   </div>
                 </m.div>
               ))}

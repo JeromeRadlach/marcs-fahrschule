@@ -7,19 +7,6 @@ import { useEntrance, useReveal } from '../lib/motion'
 const CAR_CLASSES = ['B', 'BE']
 const BIKE_CLASSES = ['A', 'A1', 'A2', 'AM']
 
-// The card's text block, rendered both inside the grid card and inside the
-// enlarged view the photo opens. Sharing it is what keeps the enlarged card an
-// enlarged card rather than a second description that can drift out of step.
-function VehicleDetails({ vehicle }) {
-  return (
-    <>
-      <h3 className="text-xl font-bold mb-2 text-white">{vehicle.name} ({vehicle.count}x)</h3>
-      <p className="text-gray-300 mb-2"><strong>Getriebe:</strong> {vehicle.transmission}</p>
-      <p className="text-gray-300">{vehicle.description}</p>
-    </>
-  )
-}
-
 function Vehicles() {
   // Filtered once, above the return, so each reveal group can be told how many
   // children it actually has.
@@ -68,13 +55,15 @@ function Vehicles() {
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}
-                      caption={<VehicleDetails vehicle={vehicle} />}
+                      title={`${vehicle.name} (${vehicle.count}x)`}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="p-6">
-                    <VehicleDetails vehicle={vehicle} />
+                    <h3 className="text-xl font-bold mb-2 text-white">{vehicle.name} ({vehicle.count}x)</h3>
+                    <p className="text-gray-300 mb-2"><strong>Getriebe:</strong> {vehicle.transmission}</p>
+                    <p className="text-gray-300">{vehicle.description}</p>
                   </div>
                 </m.div>
               ))}
@@ -95,13 +84,15 @@ function Vehicles() {
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}
-                      caption={<VehicleDetails vehicle={vehicle} />}
+                      title={`${vehicle.name} (${vehicle.count}x)`}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="p-6">
-                    <VehicleDetails vehicle={vehicle} />
+                    <h3 className="text-xl font-bold mb-2 text-white">{vehicle.name} ({vehicle.count}x)</h3>
+                    <p className="text-gray-300 mb-2"><strong>Getriebe:</strong> {vehicle.transmission}</p>
+                    <p className="text-gray-300">{vehicle.description}</p>
                   </div>
                 </m.div>
               ))}
