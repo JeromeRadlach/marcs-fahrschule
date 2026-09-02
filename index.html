@@ -3,23 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/marcs-fahrschule/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!--
+      Security headers are set by the web server, not here - see deploy/nginx.conf.
+
+      They used to be four <meta http-equiv> tags, none of which did anything.
+      X-Frame-Options and X-Content-Type-Options are honoured only as HTTP
+      response headers and are discarded when they appear in markup; the
+      Permissions-Policy meta form was proposed but never shipped in any
+      browser; and Referrer-Policy is only read from <meta name="referrer">,
+      not from http-equiv. The page therefore had no clickjacking, sniffing or
+      permissions protection at all, while appearing to have all three.
+    -->
+
     <title>Marc's Fahrschule Essen - Führerschein A, B, BE, AM</title>
     <meta name="description" content="Marc's Fahrschule in Essen - Professionelles Fahrtraining für alle Klassen. Jetzt Termin vereinbaren!" />
     
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/marcs-fahrschule/assets/index-BfUiplXl.js"></script>
-    <link rel="stylesheet" crossorigin href="/marcs-fahrschule/assets/index-5IJR4-pQ.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#050508">
+    <script type="module" crossorigin src="/marcs-fahrschule/assets/index-DI6e3E-x.js"></script>
+    <link rel="stylesheet" crossorigin href="/marcs-fahrschule/assets/index-Dmu2SVSl.css">
   </head>
   <body>
     <div id="root"></div>
