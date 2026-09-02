@@ -51,7 +51,7 @@ function Vehicles() {
                   {...carReveal.item}
                   className="u-card u-card-lift overflow-hidden"
                 >
-                  <div className="card-motion__media h-48 bg-gradient-to-br from-primary to-primary-dark">
+                  <div className="card-motion__media h-56 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}
@@ -79,7 +79,7 @@ function Vehicles() {
                   {...bikeReveal.item}
                   className="u-card u-card-lift overflow-hidden"
                 >
-                  <div className="card-motion__media h-48 bg-gradient-to-br from-primary to-primary-dark">
+                  <div className="card-motion__media h-56 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}

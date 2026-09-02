@@ -43,7 +43,7 @@ function Team() {
                   {...instructorReveal.item}
                   className="u-card u-card-lift overflow-hidden text-center"
                 >
-                  <div className="card-motion__media h-64 bg-gradient-to-br from-primary to-primary-dark">
+                  <div className="card-motion__media h-96 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
                       slug={member.image}
                       alt={member.alt}
@@ -71,7 +71,7 @@ function Team() {
                   {...officeReveal.item}
                   className="u-card u-card-lift overflow-hidden text-center"
                 >
-                  <div className="card-motion__media h-64 bg-gradient-to-br from-primary to-primary-dark">
+                  <div className="card-motion__media h-96 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
                       slug={member.image}
                       alt={member.alt}
