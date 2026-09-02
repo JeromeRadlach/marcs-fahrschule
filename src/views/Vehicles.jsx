@@ -1,4 +1,5 @@
-import { Helmet } from 'react-helmet-async'
+'use client'
+
 import { m } from 'motion/react'
 import { vehicles } from '../data/vehicles'
 import ZoomableImage from '../components/ZoomableImage'
@@ -25,11 +26,6 @@ function Vehicles() {
 
   return (
     <>
-      <Helmet>
-        <title>Fahrzeuge - Marc's Fahrschule Essen</title>
-        <meta name="description" content="Unsere modernen Fahrzeuge für Klasse A, B, BE und AM. VW Taigo, T-Roc, Yamaha MT07, Honda CB125R und NIU Roller." />
-      </Helmet>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <m.div {...intro.group}>

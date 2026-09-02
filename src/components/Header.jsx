@@ -1,6 +1,10 @@
-import { Link, NavLink } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, m, useReducedMotion } from 'motion/react'
+import { asset } from '../lib/base-path'
 import { DISTANCE, DURATION, EASE } from '../lib/motion'
 
 // The mobile panel is referenced by the burger button through aria-controls,
@@ -17,6 +21,14 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const reduced = useReducedMotion()
+
+  // next/link has no NavLink equivalent, so the active state is derived from
+  // the pathname directly. Exact equality rather than a prefix test: the site
+  // is flat, and a prefix test would light up "/" on every page.
+  //
+  // usePathname returns the path WITHOUT basePath, so these compare against the
+  // same strings the nav items are written with.
+  const pathname = usePathname()
 
   const navItems = [
     { name: 'Start', path: '/' },
@@ -129,41 +141,42 @@ function Header() {
                 actually reach a height of zero while collapsing.
               */}
               <div className="space-y-1 px-4 pt-3 sm:px-6">
-                {navItems.map((item) => (
-                  <m.div key={item.path} variants={linkVariants}>
-                    {/*
-                      No flying pill here: these links are full width, so the
-                      active route gets the solid primary pill directly and
-                      everything else stays a quiet nav item.
-                    */}
-                    <NavLink
-                      to={item.path}
-                      className="u-navitem relative flex items-center rounded-[var(--radius-xl)] px-4"
-                      style={{
-                        minHeight: 'var(--touch-min)',
-                        fontSize: 'var(--text-md)',
-                        fontWeight: 'var(--weight-semibold)'
-                      }}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {({ isActive }) => (
-                        <>
-                          {isActive && (
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 rounded-[var(--radius-xl)]"
-                              style={{
-                                background: 'var(--color-primary-500)',
-                                boxShadow: 'var(--shadow-primary)'
-                              }}
-                            />
-                          )}
-                          <span className="relative z-10">{item.name}</span>
-                        </>
-                      )}
-                    </NavLink>
-                  </m.div>
-                ))}
+                {navItems.map((item) => {
+                  const isActive = pathname === item.path
+
+                  return (
+                    <m.div key={item.path} variants={linkVariants}>
+                      {/*
+                        No flying pill here: these links are full width, so the
+                        active route gets the solid primary pill directly and
+                        everything else stays a quiet nav item.
+                      */}
+                      <Link
+                        href={item.path}
+                        aria-current={isActive ? 'page' : undefined}
+                        className="u-navitem relative flex items-center rounded-[var(--radius-xl)] px-4"
+                        style={{
+                          minHeight: 'var(--touch-min)',
+                          fontSize: 'var(--text-md)',
+                          fontWeight: 'var(--weight-semibold)'
+                        }}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {isActive && (
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 rounded-[var(--radius-xl)]"
+                            style={{
+                              background: 'var(--color-primary-500)',
+                              boxShadow: 'var(--shadow-primary)'
+                            }}
+                          />
+                        )}
+                        <span className="relative z-10">{item.name}</span>
+                      </Link>
+                    </m.div>
+                  )
+                })}
               </div>
             </m.nav>
           )}
@@ -179,7 +192,7 @@ function Header() {
         >
           {/* Brand */}
           <Link
-            to="/"
+            href="/"
             className="group flex shrink-0 items-center gap-3 rounded-[var(--radius-2xl)] px-1.5 py-1.5 text-left"
             aria-label="Zur Startseite"
           >
@@ -194,7 +207,7 @@ function Header() {
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}images/logo.png`}
+                src={asset('images/logo.png')}
                 alt=""
                 width={44}
                 height={44}
@@ -233,59 +246,60 @@ function Header() {
                 border: '1px solid var(--color-border)'
               }}
             >
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <NavLink
-                    to={item.path}
-                    className="u-navitem relative flex items-center rounded-[var(--radius-pill)] px-4"
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && (
-                          <m.span
-                            layoutId="nav-pill"
-                            className="absolute inset-0 rounded-[var(--radius-pill)]"
-                            style={{
-                              background: 'var(--color-primary-500)',
-                              boxShadow: 'var(--shadow-primary)'
-                            }}
-                            transition={
-                              reduced
-                                ? { duration: 0 }
-                                : { type: 'spring', stiffness: 420, damping: 34 }
-                            }
-                          />
-                        )}
-                        {/*
-                          The active item carries its own surface as well:
-                          while the layoutId pill flies between items the
-                          label would otherwise sit ~200ms dark on dark.
-                        */}
-                        <span
-                          className="relative z-10 flex items-center"
+              {navItems.map((item) => {
+                const isActive = pathname === item.path
+
+                return (
+                  <li key={item.path}>
+                    <Link
+                      href={item.path}
+                      aria-current={isActive ? 'page' : undefined}
+                      className="u-navitem relative flex items-center rounded-[var(--radius-pill)] px-4"
+                    >
+                      {isActive && (
+                        <m.span
+                          layoutId="nav-pill"
+                          className="absolute inset-0 rounded-[var(--radius-pill)]"
                           style={{
-                            minHeight: 'var(--touch-min)',
-                            fontSize: 'var(--text-sm)',
-                            fontWeight: isActive
-                              ? 'var(--weight-black)'
-                              : 'var(--weight-semibold)',
-                            letterSpacing: 'var(--tracking-wide)'
+                            background: 'var(--color-primary-500)',
+                            boxShadow: 'var(--shadow-primary)'
                           }}
-                        >
-                          {item.name}
-                        </span>
-                        {isActive && (
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 -z-10 rounded-[var(--radius-pill)]"
-                            style={{ background: 'var(--color-primary-500)' }}
-                          />
-                        )}
-                      </>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
+                          transition={
+                            reduced
+                              ? { duration: 0 }
+                              : { type: 'spring', stiffness: 420, damping: 34 }
+                          }
+                        />
+                      )}
+                      {/*
+                        The active item carries its own surface as well:
+                        while the layoutId pill flies between items the
+                        label would otherwise sit ~200ms dark on dark.
+                      */}
+                      <span
+                        className="relative z-10 flex items-center"
+                        style={{
+                          minHeight: 'var(--touch-min)',
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: isActive
+                            ? 'var(--weight-black)'
+                            : 'var(--weight-semibold)',
+                          letterSpacing: 'var(--tracking-wide)'
+                        }}
+                      >
+                        {item.name}
+                      </span>
+                      {isActive && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-0 -z-10 rounded-[var(--radius-pill)]"
+                          style={{ background: 'var(--color-primary-500)' }}
+                        />
+                      )}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </nav>
 

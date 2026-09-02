@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { AnimatePresence, m } from 'motion/react'
 import { DISTANCE, DURATION, EASE } from '../lib/motion'

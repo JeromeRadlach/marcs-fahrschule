@@ -1,8 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import ResponsiveImage from './ResponsiveImage'
 import { DURATION, EASE } from '../lib/motion'
+
+// Module scope so the identities are stable across renders; see the portal
+// target below.
+const subscribeToNothing = () => () => {}
+const getBrowserBody = () => document.body
+const getServerBody = () => null
 
 // Enlarged view of a grid photo, opened by ZoomableImage.
 //
@@ -12,14 +18,28 @@ import { DURATION, EASE } from '../lib/motion'
 // caption; the heading and description are still on the card the reader just
 // came from.
 //
-// Rendered through a portal into document.body rather than in place. The routed
-// page wrapper in App.jsx animates a transform on every navigation, and a
-// transformed ancestor becomes the containing block for fixed positioning - the
-// overlay would be pinned to the page wrapper instead of the viewport and stop
-// covering the screen. The portal steps outside that entirely.
+// Rendered through a portal into document.body rather than in place. The page
+// transition wrapper in src/app/site-shell.jsx animates a transform on every
+// navigation, and a transformed ancestor becomes the containing block for fixed
+// positioning - the overlay would be pinned to the page wrapper instead of the
+// viewport and stop covering the screen. The portal steps outside that entirely.
 function Lightbox({ slug, alt, isOpen, onClose }) {
   const reduced = useReducedMotion()
   const closeRef = useRef(null)
+
+  // There is no document.body to portal into while the page is prerendered to
+  // static HTML at build time, so the portal has to wait for the browser.
+  //
+  // useSyncExternalStore rather than a mounted flag flipped in an effect: it
+  // returns the server snapshot (null) during the prerender AND during the
+  // hydration render, then the client snapshot afterwards. That is the same
+  // two-pass result without a setState firing from inside an effect. The store
+  // never changes, so the subscribe callback has nothing to do.
+  const portalTarget = useSyncExternalStore(
+    subscribeToNothing,
+    getBrowserBody,
+    getServerBody
+  )
 
   // Escape closes from anywhere, not just from the focused close button, so a
   // click on the backdrop that moved focus to <body> still leaves an exit.
@@ -101,6 +121,8 @@ function Lightbox({ slug, alt, isOpen, onClose }) {
         exit: { opacity: 0, scale: 0.94 }
       }
 
+  if (!portalTarget) return null
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (
@@ -176,7 +198,7 @@ function Lightbox({ slug, alt, isOpen, onClose }) {
         </m.div>
       )}
     </AnimatePresence>,
-    document.body
+    portalTarget
   )
 }
 

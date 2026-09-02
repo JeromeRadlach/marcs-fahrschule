@@ -1,6 +1,8 @@
-import { Helmet } from 'react-helmet-async'
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { m, useReducedMotion } from 'motion/react'
+import { asset } from '../lib/base-path'
 import { useEntrance, useReveal } from '../lib/motion'
 
 // The license cards are router links, so they need the motion props applied to
@@ -34,11 +36,6 @@ function Home() {
 
   return (
     <>
-      <Helmet>
-        <title>Marc's Fahrschule Essen - Führerschein A, B, BE, AM</title>
-        <meta name="description" content="Marc's Fahrschule in Essen bietet professionelles Fahrtraining für Klasse A, B, BE und AM. Erfahrene Fahrlehrer, moderne Fahrzeuge, individuelle Betreuung." />
-      </Helmet>
-
       {/* Hero Section */}
       <section className="relative text-white py-20">
         <div className="container mx-auto px-4">
@@ -51,7 +48,7 @@ function Home() {
                 Eure Zukunft beginnt hier! Professionelle Fahrtraining in Essen für alle Klassen.
               </m.p>
               <m.div {...hero.item} className="flex flex-wrap gap-4">
-                <Link to="/kontakt" className="btn btn-primary">
+                <Link href="/kontakt" className="btn btn-primary">
                   Jetzt Anfrage senden
                 </Link>
                 <a href="tel:+492013194371" className="btn btn-secondary">
@@ -107,7 +104,7 @@ function Home() {
                   beside it names the brand.
                 */}
                 <img
-                  src={`${import.meta.env.BASE_URL}images/logo-poster.png`}
+                  src={asset('images/logo-poster.png')}
                   alt=""
                   width={480}
                   height={480}
@@ -123,12 +120,12 @@ function Home() {
                   loop
                   playsInline
                   preload="metadata"
-                  poster={`${import.meta.env.BASE_URL}images/logo-poster.png`}
+                  poster={asset('images/logo-poster.png')}
                   aria-hidden="true"
                   tabIndex={-1}
                 >
-                  <source src={`${import.meta.env.BASE_URL}images/logo-anim.webm`} type="video/webm" />
-                  <source src={`${import.meta.env.BASE_URL}images/logo-anim.mp4`} type="video/mp4" />
+                  <source src={asset('images/logo-anim.webm')} type="video/webm" />
+                  <source src={asset('images/logo-anim.mp4')} type="video/mp4" />
                 </video>
               </m.div>
             </m.div>
@@ -151,7 +148,7 @@ function Home() {
               <MotionLink
                 key={license.name}
                 {...classesGrid.item}
-                to={license.path}
+                href={license.path}
                 className="u-card u-card-interactive p-6 text-center group"
               >
                 <div className="text-5xl mb-4">{license.icon}</div>
@@ -237,7 +234,7 @@ function Home() {
             Kontaktieren Sie uns für ein unverbindliches Beratungsgespräch.
           </m.p>
           <m.div {...cta.item}>
-            <Link to="/kontakt" className="btn btn-primary">
+            <Link href="/kontakt" className="btn btn-primary">
               Jetzt Kontakt aufnehmen
             </Link>
           </m.div>

@@ -1,7 +1,13 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { getImage } from '../lib/images'
 
-// Renders a slug from src/assets/images as a responsive picture element.
+// Pages are prerendered to static HTML at build time, where a layout effect
+// cannot run and React warns about it. The effect below only ever has anything
+// to do in a browser, so it steps aside on the server rather than warning.
+const useIsomorphicLayoutEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect
+
+// Renders a slug from public/images as a responsive picture element.
 //
 // width/height come from the manifest and are always set: the source photos
 // have inconsistent aspect ratios (portrait scooter, square trailer, 3:2 cars),
@@ -19,7 +25,7 @@ function ResponsiveImage({ slug, alt, sizes = '100vw', className = '' }) {
   // handler, in which case load never fires and the photo would stay at zero
   // opacity forever. Checking complete on mount covers that; useLayoutEffect
   // runs it before paint so the correct state is the first thing drawn.
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (imgRef.current?.complete) setIsLoaded(true)
   }, [slug])
 

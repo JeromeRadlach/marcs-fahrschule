@@ -1,4 +1,5 @@
-import { Helmet } from 'react-helmet-async'
+'use client'
+
 import { m } from 'motion/react'
 import { team, officeTeam } from '../data/team'
 import ZoomableImage from '../components/ZoomableImage'
@@ -17,11 +18,6 @@ function Team() {
 
   return (
     <>
-      <Helmet>
-        <title>Das Team - Marc's Fahrschule Essen</title>
-        <meta name="description" content="Lernen Sie unser Team kennen. Erfahrene Fahrlehrer und freundliches Büroteam für Ihre Fahrtraining." />
-      </Helmet>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <m.div {...intro.group}>

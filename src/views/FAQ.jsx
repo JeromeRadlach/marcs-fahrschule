@@ -1,5 +1,6 @@
+'use client'
+
 import { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { faqData } from '../data/faq'
 import { DURATION, EASE, useEntrance, useReveal } from '../lib/motion'
@@ -27,11 +28,6 @@ function FAQ() {
 
   return (
     <>
-      <Helmet>
-        <title>FAQ - Marc's Fahrschule Essen</title>
-        <meta name="description" content="Häufig gestellte Fragen zur Fahrschule, Führerscheinklassen, Theorie und Praxis." />
-      </Helmet>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <m.div {...heading.group}>

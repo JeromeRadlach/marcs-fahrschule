@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
+import { asset } from '../lib/base-path'
 
 const socialLinks = [
   { name: 'Instagram', url: 'https://www.instagram.com/marcs_fahrschule', icon: 'instagram' },
@@ -61,7 +62,7 @@ function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <img
-              src={`${import.meta.env.BASE_URL}images/logo.png`}
+              src={asset('images/logo.png')}
               alt=""
               width={52}
               height={52}
@@ -109,7 +110,7 @@ function Footer() {
             {areaLinks.map((item) => (
               <li key={item.path}>
                 <Link
-                  to={item.path}
+                  href={item.path}
                   className="u-navitem flex items-center rounded-[var(--radius-sm)] px-2"
                   style={{
                     minHeight: 'var(--touch-min)',

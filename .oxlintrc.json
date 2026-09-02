@@ -4,5 +4,17 @@
   "rules": {
     "react/rules-of-hooks": "error",
     "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/app/**/*.jsx"],
+      "rules": {
+        // App Router files are required by the framework to export `metadata`
+        // and `viewport` alongside the route component. The rule exists to
+        // protect Fast Refresh, which Next handles for these files itself, so
+        // the warning is noise that can never be acted on.
+        "react/only-export-components": "off"
+      }
+    }
+  ]
 }

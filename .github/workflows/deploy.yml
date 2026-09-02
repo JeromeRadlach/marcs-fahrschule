@@ -1,5 +1,5 @@
-# Builds the site and publishes dist/ to GitHub Pages on every push to main,
-# replacing the manual `npm run deploy` (gh-pages branch) flow.
+# Builds the statically exported Next.js site and publishes out/ to GitHub Pages
+# on every push to main, replacing the manual `npm run deploy` (gh-pages branch) flow.
 name: Deploy to GitHub Pages
 
 on:
@@ -28,13 +28,25 @@ jobs:
           node-version: 22
           cache: npm
 
+      # No static_site_generator preset: next.config.mjs already carries the
+      # project-page basePath, and the preset's config injection cannot parse
+      # a computed config like ours.
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
       - run: npm ci
 
       - run: npm run build
 
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: out
 
   deploy:
     needs: build

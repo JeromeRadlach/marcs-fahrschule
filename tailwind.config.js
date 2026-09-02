@@ -1,6 +1,8 @@
 export default {
+  // Everything lives under src/ - the App Router in src/app, the page bodies in
+  // src/views, and the shared components. index.html is gone with Vite; the
+  // document is now src/app/layout.jsx and is covered by the same glob.
   content: [
-    "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {

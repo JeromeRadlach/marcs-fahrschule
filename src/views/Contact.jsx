@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async'
 import ContactForm from '../components/ContactForm'
 
 function Contact() {
@@ -17,11 +16,6 @@ function Contact() {
 
   return (
     <>
-      <Helmet>
-        <title>Kontakt - Marc's Fahrschule Essen</title>
-        <meta name="description" content="Kontaktieren Sie Marc's Fahrschule in Essen. Telefon, E-Mail, Adresse und Öffnungszeiten." />
-      </Helmet>
-
       {/* Hero */}
       <section className="text-white py-16">
         <div className="container mx-auto px-4 text-center">

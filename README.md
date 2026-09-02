@@ -1,16 +1,65 @@
-# React + Vite
+# Marc's Fahrschule
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The website for Marc's Fahrschule in Essen. Next.js (App Router) exported as a
+fully static site, plus a small Express service that takes the contact form.
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev        # Next dev server, http://localhost:3000/marcs-fahrschule
+npm run dev:full   # the same, plus the contact API on :3001
+```
 
-## React Compiler
+`npm run dev` alone is enough for everything except submitting the contact form:
+that posts to `/api/contact`, which `next.config.mjs` proxies to the Express app
+in development. Copy `.env.example` to `.env` before running the API.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Scripts
 
-## Expanding the Oxlint configuration
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Next dev server |
+| `npm run build` | Static export into `out/` |
+| `npm run start` | Next production server (unused by the Pages deploy) |
+| `npm run server` | The Express contact API on port 3001 |
+| `npm run dev:full` | `server` and `dev` together |
+| `npm run lint` | oxlint |
+| `npm run images` | Regenerates `public/images/` and the manifest from `assets-src/` |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Deployment
+
+The site is a static export (`output: 'export'` in `next.config.mjs`), so
+`npm run build` writes plain HTML into `out/` and no Node server is needed to
+serve it. `.github/workflows/` publishes `out/` to GitHub Pages on every push to
+`main`.
+
+GitHub Pages serves the site from a repository subpath
+(`https://JeromeRadlach.github.io/marcs-fahrschule/`), so the build sets
+`basePath: '/marcs-fahrschule'`. Building for a domain root instead:
+
+```sh
+DEPLOY=root npm run build
+```
+
+Next prefixes its own bundles and stylesheets with the base path, but it does
+**not** rewrite path strings written in JSX - so anything served out of
+`public/` has to go through `asset()` from `src/lib/base-path.js`, which reads
+the same value out of `next.config.mjs`. Writing `/images/...` by hand will 404
+on GitHub Pages.
+
+The contact API (`server.js`, `api/`, `lib/`, `deploy/nginx.conf`) is deployed
+separately; see `deploy/nginx.conf` for the reverse proxy that puts it back on
+the same origin as the site.
+
+## Layout
+
+```
+src/app/          App Router: layout, per-route page.jsx with its Metadata
+src/views/        the page bodies each route renders
+src/components/   shared UI
+src/data/         vehicle, team and FAQ content
+src/lib/          image manifest helpers, base path, motion tokens
+src/index.css     design tokens, Tailwind layers and component classes
+public/           images, favicon, robots.txt, sitemap.xml
+```

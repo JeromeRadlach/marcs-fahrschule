@@ -1,4 +1,5 @@
-import { Helmet } from 'react-helmet-async'
+'use client'
+
 import { m } from 'motion/react'
 import { useEntrance, useReveal } from '../lib/motion'
 
@@ -23,11 +24,6 @@ function Aufbauseminar() {
 
   return (
     <>
-      <Helmet>
-        <title>Aufbauseminar - Marc's Fahrschule Essen</title>
-        <meta name="description" content="Unser Aufbauseminar für Lernfahrzeugführer. Verbessern Sie sichere Fahrweise und erhöhen Sie Ihre Prüfungschancen." />
-      </Helmet>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           {/* The entrance group wraps only the intro. Putting it on the

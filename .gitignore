@@ -13,6 +13,12 @@ lerna-debug.log*
 .env.*.local
 
 node_modules
+
+# Next.js build output. .next is the working directory, out/ is the static
+# export that gets published to GitHub Pages.
+.next
+out
+
 dist
 dist-ssr
 *.local
