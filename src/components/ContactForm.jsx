@@ -256,7 +256,7 @@ function ContactForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-motion w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-lg disabled:opacity-50"
+              className="btn btn-primary w-full"
             >
               {/*
                 Both labels sit in the same grid cell, so the box is sized by

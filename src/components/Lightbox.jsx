@@ -187,7 +187,7 @@ function Lightbox({ slug, alt, title, isOpen, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Bild schließen"
-            className="btn-motion absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="btn-motion absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg"
           >
             <svg
               className="h-6 w-6"

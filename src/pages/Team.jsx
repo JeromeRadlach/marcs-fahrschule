@@ -41,7 +41,7 @@ function Team() {
                 <m.div
                   key={member.id}
                   {...instructorReveal.item}
-                  className="card-motion bg-gray-dark rounded-lg overflow-hidden shadow-lg text-center"
+                  className="u-card u-card-lift overflow-hidden text-center"
                 >
                   <div className="card-motion__media h-64 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
@@ -70,7 +70,7 @@ function Team() {
                 <m.div
                   key={member.id}
                   {...officeReveal.item}
-                  className="card-motion bg-gray-dark rounded-lg overflow-hidden shadow-lg text-center"
+                  className="u-card u-card-lift overflow-hidden text-center"
                 >
                   <div className="card-motion__media h-64 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage

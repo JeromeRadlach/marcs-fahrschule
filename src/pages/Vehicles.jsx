@@ -49,7 +49,7 @@ function Vehicles() {
                 <m.div
                   key={vehicle.id}
                   {...carReveal.item}
-                  className="card-motion bg-gray-dark rounded-lg overflow-hidden shadow-lg"
+                  className="u-card u-card-lift overflow-hidden"
                 >
                   <div className="card-motion__media h-48 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage
@@ -78,7 +78,7 @@ function Vehicles() {
                 <m.div
                   key={vehicle.id}
                   {...bikeReveal.item}
-                  className="card-motion bg-gray-dark rounded-lg overflow-hidden shadow-lg"
+                  className="u-card u-card-lift overflow-hidden"
                 >
                   <div className="card-motion__media h-48 bg-gradient-to-br from-primary to-primary-dark">
                     <ZoomableImage

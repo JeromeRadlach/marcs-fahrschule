@@ -23,7 +23,7 @@ function Contact() {
       </Helmet>
 
       {/* Hero */}
-      <section className="bg-gray-dark text-white py-16">
+      <section className="text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4 text-white">Kontakt</h1>
           <p className="text-xl text-white opacity-90">Wir freuen uns auf Ihre Nachricht!</p>
@@ -104,7 +104,7 @@ function Contact() {
       </section>
 
       {/* Map */}
-      <section className="py-8 bg-gray-dark">
+      <section className="py-8">
         <div className="container mx-auto px-4">
           <iframe 
             title="Standort von Marc's Fahrschule auf Google Maps"

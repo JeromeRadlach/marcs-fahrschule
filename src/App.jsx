@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
-import { LazyMotion, MotionConfig, domAnimation, m, useReducedMotion } from 'motion/react'
+import { LazyMotion, MotionConfig, domMax, m, useReducedMotion } from 'motion/react'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Backdrop from './components/Backdrop'
 import ScrollToTop from './components/ScrollToTop'
 import BackToTop from './components/BackToTop'
 import { DURATION, DISTANCE, EASE } from './lib/motion'
@@ -60,24 +61,23 @@ function App() {
   return (
     <HelmetProvider>
       {/*
-        LazyMotion with the domAnimation feature set, paired with the m
-        component instead of motion. domAnimation covers transforms, opacity,
-        variants, gestures and AnimatePresence - everything this site uses.
-        Nothing here needs layout animation or SVG path drawing, which is what
-        the heavier domMax set would add.
+        LazyMotion with the domMax feature set, paired with the m component
+        instead of motion. The header's active-tab pill slides between nav
+        items via layoutId, and layout animations live in domMax only -
+        domAnimation would leave the pill snapping.
 
         features is passed the set directly rather than a dynamic import.
-        Deferring it does move about 12KB gzipped off the entry chunk, but Vite
+        Deferring it does move some weight off the entry chunk, but Vite
         emits no modulepreload for it, so it is only requested once the entry
         has run. Until it lands, every m element with a hidden initial - the
         hero headline among them - renders at opacity 0, and stays that way for
-        good if the request fails. Trading a blank LCP element for 12KB is the
-        wrong way round on a page whose job is to be read immediately.
+        good if the request fails. Trading a blank LCP element for a few KB is
+        the wrong way round on a page whose job is to be read immediately.
 
         reducedMotion="user" is the backstop: any animation added later that
         forgets to check the preference still has its transforms dropped.
       */}
-      <LazyMotion features={domAnimation} strict>
+      <LazyMotion features={domMax} strict>
         <MotionConfig reducedMotion="user">
           {/*
             Derived from Vite's base rather than hardcoded, so a build for the
@@ -88,39 +88,23 @@ function App() {
           <Router basename={import.meta.env.BASE_URL}>
             <ScrollToTop />
             <div className="relative min-h-screen bg-dark-gray text-white">
+              {/* Aurora backdrop: fixed, decorative, behind everything. */}
+              <Backdrop />
+
               {/*
-                Brand background, shown at full opacity. Fixed so it stays put while
-                the page scrolls, and sitting above the wrapper's own background
-                rather than behind it, which would hide it entirely.
-
-                The backdrop is black because the source artwork is an opaque black
-                square: matching it means the edges of the image disappear instead
-                of showing as a box. background-size: contain keeps the whole emblem
-                visible at any viewport shape.
-
-                Two layers: the artwork centred on top, and a grain tile lifted from
-                the artwork's own backdrop repeating underneath it. Flat #000 around
-                the edges would not match - the source backdrop is faintly dithered,
-                so the join would show as a clean rectangle against speckle.
-
-                aria-hidden and pointer-events-none keep it out of the accessibility
-                tree and out of the way of clicks.
+                The navigation bar is fixed at the bottom of the viewport on
+                mobile and at the top on desktop; the content column reserves
+                its height on whichever edge it occupies (the tokens flip at
+                the lg breakpoint).
               */}
               <div
-                aria-hidden="true"
-                className="pointer-events-none fixed inset-0 z-0 bg-black"
+                className="relative flex min-h-screen flex-col"
                 style={{
-                  backgroundImage: [
-                    `url(${import.meta.env.BASE_URL}images/background-1400.webp)`,
-                    `url(${import.meta.env.BASE_URL}images/background-grain.png)`
-                  ].join(', '),
-                  backgroundPosition: 'center, center',
-                  backgroundSize: 'contain, auto',
-                  backgroundRepeat: 'no-repeat, repeat'
+                  zIndex: 'var(--z-content)',
+                  paddingTop: 'var(--content-pad-top)',
+                  paddingBottom: 'var(--content-pad-bottom)'
                 }}
-              />
-
-              <div className="relative z-10 flex min-h-screen flex-col">
+              >
                 <Header />
                 <main className="flex-grow">
                   <AnimatedRoutes />

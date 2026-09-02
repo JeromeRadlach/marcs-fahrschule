@@ -6,14 +6,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        'primary': '#FF6B00',
-        'primary-dark': '#E55E00',
-        'dark-gray': '#111827',
-        'gray-dark': '#1f2937',
+        // Neon brand orange. `primary-dark` keeps its old name so existing
+        // hover:bg-primary-dark utilities still resolve.
+        'primary': '#ff6b00',
+        'primary-dark': '#e55e00',
+        'primary-light': '#ff8a3d',
+        // Dark text for use on the full-strength primary: white on the brand
+        // orange fails WCAG AA at 16px; the dark ink passes comfortably.
+        'on-primary': '#12121c',
+        // Ink scale. `dark-gray` is the page ground, `gray-dark` the solid
+        // surface used where translucency won't do (inputs, lightbox).
+        'dark-gray': '#050508',
+        'gray-dark': '#12121c',
+        'ink': {
+          1000: '#050508',
+          950: '#08080d',
+          900: '#0d0d15',
+          850: '#12121c',
+          800: '#191926',
+          700: '#232333',
+        },
       },
       fontFamily: {
-        'sans': ['Barlow', 'system-ui', 'sans-serif'],
-        'display': ['Oswald', 'Barlow', 'system-ui', 'sans-serif'],
+        'sans': ['DM Sans', 'system-ui', 'sans-serif'],
+        'display': ['Space Grotesk', 'DM Sans', 'system-ui', 'sans-serif'],
+        'mono': ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       // Motion tokens, mirroring src/lib/motion.js. Exposed as Tailwind scales
       // so one-off transitions in markup use the same numbers as the shared

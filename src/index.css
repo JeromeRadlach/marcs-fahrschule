@@ -2,85 +2,700 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles */
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Marc's Fahrschule
+   Dark Neon / Hot-Rod. Palette from the logo plus the brand's photo
+   world, ported from the Next.js rebuild (ZayLogikfabrik/Marcs).
+   Rule: no raw colour, size, spacing or shadow values outside this
+   block.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Base / surfaces ───────────────────────────────────────── */
+  --color-ink-1000: #050508;
+  --color-ink-950: #08080d;
+  --color-ink-900: #0d0d15;
+  --color-ink-850: #12121c;
+  --color-ink-800: #191926;
+  --color-ink-700: #232333;
+
+  --color-surface: rgba(255, 255, 255, 0.045);
+  --color-surface-raised: rgba(255, 255, 255, 0.07);
+  --color-surface-sunken: rgba(0, 0, 0, 0.32);
+
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-mid: rgba(255, 255, 255, 0.18);
+  --color-border-strong: rgba(255, 255, 255, 0.28);
+
+  --color-overlay: rgba(5, 5, 8, 0.72);
+
+  /* ── Text ──────────────────────────────────────────────────── */
+  --color-text-primary: #f6f6f9;
+  --color-text-secondary: #b6b6c6;
+  /* #8a8a9c only reached 4.24:1 inside a .u-card over the aurora core —
+     the fixed backdrop lifts the ground where cards glide over it.
+     #9a9aac: 5.2:1 there, 7.4:1 on the plain ground. */
+  --color-text-tertiary: #9a9aac;
+  /* Dark text on the full neon colour: white on the brand orange fails
+     WCAG AA at 16px. Dark reaches over 6:1 — and on hover (lighter
+     orange) the contrast rises further. */
+  --color-text-on-primary: var(--color-ink-850);
+
+  /* ── Brand: neon orange ────────────────────────────────────── */
+  --color-primary-300: #ffb066;
+  --color-primary-400: #ff8a3d;
+  --color-primary-500: #ff6b00;
+  --color-primary-600: #e55e00;
+  --color-primary-700: #b34a00;
+  --color-primary-050: rgba(255, 107, 0, 0.12);
+
+  /* ── Secondary: amber from the photo world ─────────────────── */
+  --color-amber-400: #ffa94d;
+  --color-amber-500: #ff6900;
+  --color-amber-600: #e05500;
+  --color-amber-050: rgba(255, 105, 0, 0.12);
+
+  /* ── Accents: neon cyan / violet from the banner ───────────── */
+  --color-cyan-400: #4ee0f5;
+  --color-cyan-500: #22d3ee;
+  --color-violet-500: #a855f7;
+
+  /* ── Status ────────────────────────────────────────────────── */
+  --color-success: #34d399;
+  --color-success-050: rgba(52, 211, 153, 0.12);
+  --color-error: #ff4d4f;
+  --color-warning: var(--color-amber-400);
+
+  /* ── Typography ────────────────────────────────────────────── */
+  --font-display: "Space Grotesk", "DM Sans", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --text-2xs: 0.688rem; /* 11px  — uppercase badges only */
+  --text-xs: 0.813rem; /* 13px  — meta, captions */
+  --text-sm: 0.875rem; /* 14px  — secondary UI text */
+  --text-md: 1rem; /* 16px  — UI base */
+  --text-lg: 1.125rem; /* 18px  — body base */
+  --text-xl: 1.25rem; /* 20px  — lead */
+  --text-2xl: clamp(1.375rem, 1.1rem + 1.2vw, 1.75rem); /* subheads */
+  --text-3xl: clamp(1.625rem, 1.2rem + 2vw, 2.25rem); /* section headlines */
+  --text-4xl: clamp(2rem, 1.3rem + 3.2vw, 3rem); /* large headlines */
+  --text-5xl: clamp(2.5rem, 1.4rem + 5vw, 4.5rem); /* hero */
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.75;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 800;
+
+  --tracking-tighter: -0.045em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: -0.008em;
+  --tracking-wide: 0.04em;
+  --tracking-caps: 0.14em;
+
+  /* ── Spacing (4px grid) ────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-1-5: 0.375rem;
+  --space-2: 0.5rem;
+  --space-2-5: 0.625rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* ── Touch targets ─────────────────────────────────────────── */
+  --touch-min: 48px;
+  --touch-preferred: 56px;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 22px;
+  --radius-pill: 50px;
+  --radius-full: 9999px;
+
+  /* ── Shadows / elevation ───────────────────────────────────── */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-up: 0 -20px 60px rgba(0, 0, 0, 0.6), 0 -4px 16px rgba(0, 0, 0, 0.35);
+
+  --shadow-primary: 0 8px 28px rgba(255, 107, 0, 0.35),
+    0 2px 8px rgba(255, 107, 0, 0.22);
+  --shadow-primary-hover: 0 12px 38px rgba(255, 107, 0, 0.48),
+    0 3px 12px rgba(255, 107, 0, 0.3);
+  /* Double ring: dark separator inside, opaque pink outside (9.2:1 on
+     the ground). A translucent single ring composited to 1.88:1 and was
+     effectively invisible on the dark ground. */
+  --shadow-focus:
+    0 0 0 3px var(--color-ink-1000),
+    0 0 0 6px var(--color-primary-300);
+
+  /* Neon glows (brand signature) */
+  --glow-primary: 0 0 32px rgba(255, 107, 0, 0.45);
+  --glow-cyan: 0 0 32px rgba(34, 211, 238, 0.35);
+  --glow-amber: 0 0 32px rgba(255, 169, 77, 0.35);
+
+  /* Neon borders — one step per role, not per call site */
+  --color-primary-border: rgba(255, 107, 0, 0.38);
+  --color-primary-border-strong: rgba(255, 107, 0, 0.5);
+  --color-success-border: rgba(52, 211, 153, 0.45);
+
+  /* Floating chrome surfaces (header, FAB) */
+  --chrome-idle: rgba(8, 8, 13, 0.35);
+  --chrome-scrolled: rgba(8, 8, 13, 0.84);
+  --chrome-solid: rgba(13, 13, 21, 0.92);
+
+  /* ── Motion ────────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.12, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --duration-instant: 80ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-base: 320ms; /* kept for src/lib/motion.js parity */
+  --duration-slow: 400ms;
+  --duration-glacial: 600ms;
+
+  --lift-sm: -2px;
+  --lift-md: -4px;
+
+  /* ── Layout ────────────────────────────────────────────────── */
+  --header-height: 72px;
+  --content-max: 1180px;
+
+  /* Derived layout values. The navigation bar is fixed at the BOTTOM of
+     the viewport on mobile and at the TOP on desktop; content, FAB and
+     scroll targets reserve room on whichever edge it occupies. */
+  --content-pad-top: 0px;
+  --fab-bottom: calc(
+    var(--header-height) + env(safe-area-inset-bottom, 0px) + var(--space-4)
+  );
+  --content-pad-bottom: calc(
+    var(--header-height) + env(safe-area-inset-bottom, 0px) + var(--space-6)
+  );
+
+  /* ── Z-index map (no ad-hoc values!) ───────────────────────── */
+  --z-backdrop: 0;
+  --z-content: 10;
+  --z-header: 100;
+  --z-overlay: 200;
+}
+
+/* Desktop: the bar sits at the top, so the reserved space moves there */
+@media (min-width: 64rem) {
+  :root {
+    --content-pad-top: var(--header-height);
+    --fab-bottom: var(--space-6);
+    --content-pad-bottom: 0px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+
+html {
+  background: var(--color-ink-1000);
+  scroll-behavior: smooth;
+  /* Sequential focus navigation and scrollIntoView must respect the
+     fixed chrome bar on whichever edge it occupies: without this,
+     tabbed-to targets land entirely behind the 72px bar (WCAG 2.4.11). */
+  scroll-padding-top: calc(var(--content-pad-top) + var(--space-4));
+  scroll-padding-bottom: calc(var(--content-pad-bottom) + var(--space-4));
+  /* `clip` rather than `hidden`: scroll reveals with sideways offset sit
+     next to the viewport before they trigger; `hidden` would create a
+     scroll container that iOS Safari still pans, `clip` cuts hard and
+     leaves the vertical axis alone. */
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
-  font-family: 'Barlow', system-ui, sans-serif;
+  background: var(--color-ink-1000);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+::selection {
+  background: var(--color-primary-500);
+  color: var(--color-text-on-primary);
 }
 
-/* Black outline on all text.
-
-   The page sits on the brand artwork, whose chrome centre is bright, so light
-   text needs separating from it. paint-order draws the stroke behind the fill
-   rather than centred on the glyph edge, which would otherwise eat into thin
-   strokes and make small text look muddy.
-
-   Note the stroke is centred on the glyph outline, so the fill covers its
-   inner half: the visible outline is half the value below. 6px reads as a 3px
-   border. Because paint-order repaints the fill over the stroke, the letter
-   shapes stay intact however thick this gets - the weight grows outward only. */
-body {
-  -webkit-text-stroke: 6px #000;
-  paint-order: stroke fill;
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  /* NO border-radius here! The ring follows the element's own radius;
+     a radius on this unlayered rule would force every focused pill and
+     circle to 8px. */
 }
 
-/* Oswald on headings, Barlow for everything else. Set here rather than as a
-   font-display class on each of the 43 heading tags across the pages.
-   Oswald is condensed, so a touch of tracking keeps the caps from crowding. */
+/* Space Grotesk on headings, DM Sans for everything else. Set here
+   rather than as a class on each heading tag across the pages. */
 h1, h2, h3 {
-  font-family: 'Oswald', 'Barlow', system-ui, sans-serif;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.14;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPE HELPERS
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-primary-400);
+}
+
+.u-lead {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+/* Neon text glow, used sparingly */
+.u-neon {
+  color: var(--color-text-primary);
+  text-shadow: 0 0 18px rgba(255, 107, 0, 0.55), 0 0 48px rgba(255, 107, 0, 0.25);
+}
+
+.u-gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--color-text-primary) 0%,
+    var(--color-primary-400) 45%,
+    var(--color-amber-400) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SURFACES & GLASS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Card with a glowing border on hover/focus */
+.u-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-sm);
+  /* Limits the repaint area of a card hover to the card itself —
+     noticeable in grids of 8-10 cards. */
+  contain: layout paint;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease),
+    transform var(--duration-normal) var(--ease-out),
+    background-color var(--duration-fast) var(--ease);
+}
+
+/*
+ * .u-card itself stays static: the class also hangs on pure info panels
+ * (legal text, opening hours). A hover state there would be a click
+ * promise nobody keeps.
+ *
+ *   .u-card-lift        — media card, lifts but NO press feedback
+ *   .u-card-interactive — real button/link, lifts AND reacts to press
+ */
+.u-card-lift:hover,
+.u-card-interactive:hover {
+  border-color: var(--color-border-mid);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.u-card-interactive:active {
+  transform: scale(0.985);
+  box-shadow: var(--shadow-sm);
+}
+
+.u-card-interactive:focus-visible {
+  border-color: var(--color-primary-500);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS — all 5 states
+   ═══════════════════════════════════════════════════════════════ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2-5);
+  min-height: var(--touch-preferred);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--tracking-wide);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease),
+    transform var(--duration-instant) var(--ease);
+}
+
+.btn-primary {
+  background: var(--color-primary-500);
+  color: var(--color-text-on-primary);
+  box-shadow: var(--shadow-primary);
+}
+.btn-primary:hover {
+  background: var(--color-primary-400);
+  box-shadow: var(--shadow-primary-hover);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:focus-visible {
+  box-shadow: var(--shadow-focus), var(--shadow-primary);
+}
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1.5px solid var(--color-border-mid);
+  box-shadow: var(--shadow-xs);
+}
+.btn-secondary:hover {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+.btn-secondary:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-xs);
+}
+.btn-secondary:focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Smallest devices: .btn is nowrap, long labels burst the pill */
+@media (max-width: 25rem) {
+  .btn {
+    padding-inline: var(--space-4);
+    font-size: var(--text-sm);
+    gap: var(--space-2);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHROME BAR — the fixed navigation surface
+   Bottom-anchored on mobile (border and shadow point up), top-anchored
+   on desktop (they point down). The scrolled state lives here because
+   the direction of both flips with the breakpoint, which inline styles
+   cannot express.
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-chrome-bar {
+  background: var(--chrome-idle);
+  border-top: 1px solid transparent;
+  transition:
+    background-color var(--duration-normal) var(--ease),
+    border-color var(--duration-normal) var(--ease),
+    box-shadow var(--duration-normal) var(--ease);
+}
+
+.u-chrome-bar[data-scrolled="true"] {
+  background: var(--chrome-scrolled);
+  border-top-color: var(--color-border);
+  box-shadow: var(--shadow-up);
+}
+
+@media (min-width: 64rem) {
+  .u-chrome-bar {
+    border-top: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .u-chrome-bar[data-scrolled="true"] {
+    border-top-color: transparent;
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAV ITEMS — header pills, footer links
+   Inline styles cannot express hover/active states, so all five
+   states live here.
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-navitem {
+  color: var(--color-text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    transform var(--duration-instant) var(--ease);
+}
+
+.u-navitem:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-raised);
+}
+
+.u-navitem:active {
+  transform: scale(0.97);
+}
+
+/* Explicit, although :focus-visible applies globally — otherwise the
+   state silently drops if someone rebuilds the global selector. */
+.u-navitem:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.u-navitem:disabled,
+.u-navitem[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Active tab: the pill behind it carries the colour, no hover ground */
+.u-navitem[aria-current="page"],
+.u-navitem[aria-selected="true"] {
+  color: var(--color-text-on-primary);
+  font-weight: var(--weight-black);
+}
+
+.u-navitem[aria-current="page"]:hover,
+.u-navitem[aria-selected="true"]:hover {
+  background-color: transparent;
+}
+
+/* Ghost variant: active item sits on transparent ground, not on a pill */
+.u-navitem-ghost[aria-current="page"],
+.u-navitem-ghost[aria-selected="true"],
+.u-navitem-ghost[aria-pressed="true"] {
+  color: var(--color-primary-400);
+}
+
+/* Header pills: wrapping is always the worse failure */
+.u-navitem > span {
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FAB (back to top)
+   Base shadow as a class so :focus-visible can extend it — as an
+   inline style it would swallow the focus ring.
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-fab {
+  /* The base border also lives here — inline it would block :hover. */
+  border: 1.5px solid var(--color-primary-border-strong);
+  box-shadow: var(--shadow-lg), var(--glow-primary);
+  transition:
+    box-shadow var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+.u-fab:hover {
+  border-color: var(--color-primary-500);
+}
+
+.u-fab:focus-visible {
+  box-shadow: var(--shadow-focus), var(--shadow-lg), var(--glow-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BADGES / CHIPS
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-1-5) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-mid);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.u-badge-primary {
+  border-color: var(--color-primary-border-strong);
+  background: var(--color-primary-050);
+  color: var(--color-primary-300);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BACKDROP — aurora + grid (purely decorative)
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes aurora-a {
+  0%,
+  100% {
+    transform: translate3d(-12%, -8%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(10%, 6%, 0) scale(1.18);
+  }
+}
+
+@keyframes aurora-b {
+  0%,
+  100% {
+    transform: translate3d(12%, 10%, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-10%, -6%, 0) scale(0.92);
+  }
+}
+
+@keyframes aurora-c {
+  0%,
+  100% {
+    transform: translate3d(0, 4%, 0) scale(0.95);
+  }
+  50% {
+    transform: translate3d(6%, -10%, 0) scale(1.15);
+  }
+}
+
+/* Only opacity: scale keyframes on a blurred layer would force
+   re-rasterisation every frame. */
+@keyframes halo-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* contain: paint limits the paint area to the layer itself. No
+   filter: blur() on these — the keyframes contain scale, and a scaled
+   blur layer re-rasterises every frame; the radial gradient's extra
+   colour stops replace the blur visually. */
+.bg-aurora {
+  border-radius: var(--radius-full);
+  contain: paint;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .bg-aurora--c {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO LOGO: gate motion in CSS, not in JS
+   The autoplay loop cannot be paused via CSS, so under
+   prefers-reduced-motion the still image replaces the video entirely
+   (WCAG 2.2.2 — Pause, Stop, Hide).
+   ═══════════════════════════════════════════════════════════════ */
+
+.u-motion-still {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-motion-video {
+    display: none;
+  }
+  .u-motion-still {
+    display: block;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-700);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-700);
 }
 
 /* ---------------------------------------------------------------------------
    Motion system
 
-   The CSS half of src/lib/motion.js. Durations and curves are duplicated here
-   as custom properties because CSS transitions cannot read the JS module;
-   changing one means changing the other.
-
-   Everything below animates transform, opacity, box-shadow or colour only, so
-   it stays off the layout path. The two deliberate exceptions - the accordion
-   panel height and the header condense - are animated by their own components
-   and are short and isolated.
+   The CSS half of src/lib/motion.js. Everything below animates transform,
+   opacity, box-shadow or colour only, so it stays off the layout path. The
+   two deliberate exceptions - the accordion panel height and the mobile menu
+   - are animated by their own components and are short and isolated.
 --------------------------------------------------------------------------- */
 
-:root {
-  --duration-instant: 120ms;
-  --duration-fast: 200ms;
-  --duration-base: 320ms;
-  --duration-slow: 500ms;
-
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-
-  --lift-sm: -2px;
-  --lift-md: -4px;
-}
-
 @layer components {
-  /* Primary and secondary calls to action.
+  /* Primary and secondary calls to action that are not .btn pills.
 
-     Hover lifts the button and adds an orange glow; press returns it to rest
+     Hover lifts the element and adds a neon glow; press returns it to rest
      and takes 3% off the scale, so a click always reports back even when the
      navigation that follows is instant.
 
      The lift is behind @media (hover: hover) because a touch device that
-     applies :hover on tap leaves the button stuck in the lifted state until
-     something else is tapped. :active is not guarded - press feedback is
-     exactly what a touch device should get.
-
-     The element must not be display: inline. A transform has no effect on a
-     non-replaced inline box, so a plain <a> silently gets no lift and no
-     press. Buttons and flex or grid children are already fine; a link that is
-     none of those needs inline-block adding alongside this class. The class
-     cannot set display itself - it would break .btn-motion elements that are
-     deliberately flex, such as the back-to-top control. */
+     applies :hover on tap leaves the element stuck lifted until something
+     else is tapped. :active is not guarded - press feedback is exactly what
+     a touch device should get. */
   .btn-motion {
     transition:
       background-color var(--duration-fast) var(--ease-out),
@@ -93,7 +708,7 @@ h1, h2, h3 {
   @media (hover: hover) {
     .btn-motion:hover {
       transform: translateY(var(--lift-sm));
-      box-shadow: 0 8px 24px -8px rgb(255 107 0 / 0.55);
+      box-shadow: var(--shadow-primary-hover);
     }
   }
 
@@ -104,14 +719,10 @@ h1, h2, h3 {
 
   /* Cards in the team and vehicle grids.
 
-     The media wrapper is a fixed-size mask; the image inside scales past it on
-     hover so the card's footprint never changes and nothing around it reflows. */
-  .card-motion {
-    transition:
-      transform var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out);
-  }
-
+     The media wrapper is a fixed-size mask; the image inside scales past it
+     on hover so the card's footprint never changes and nothing around it
+     reflows. The lift itself comes from .u-card-lift; only the image zoom
+     lives here. */
   .card-motion__media {
     overflow: hidden;
   }
@@ -121,47 +732,10 @@ h1, h2, h3 {
   }
 
   @media (hover: hover) {
-    .card-motion:hover {
-      transform: translateY(var(--lift-md));
-      box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.7);
-    }
-
-    .card-motion:hover .card-motion__media img {
+    .u-card-lift:hover .card-motion__media img,
+    .u-card-interactive:hover .card-motion__media img {
       transform: scale(1.04);
     }
-  }
-
-  /* Header navigation.
-
-     The underline grows from the centre on hover and stays put on the active
-     route. It is a pseudo-element rather than a border so that showing it does
-     not change the link's height, which a border-bottom would. */
-  .nav-link {
-    position: relative;
-    transition: color var(--duration-fast) var(--ease-out);
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
-    height: 2px;
-    background-color: currentColor;
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform var(--duration-fast) var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .nav-link:hover::after {
-      transform: scaleX(1);
-    }
-  }
-
-  .nav-link[aria-current='page']::after {
-    transform: scaleX(1);
   }
 
   /* Form fields. The ring is drawn with box-shadow rather than outline so it
@@ -175,15 +749,15 @@ h1, h2, h3 {
   .input-motion:focus {
     outline: none;
     border-color: transparent;
-    box-shadow: 0 0 0 2px #ff6b00;
+    box-shadow: 0 0 0 2px var(--color-primary-500);
   }
 
-  /* Photos fade up over the orange gradient placeholder already sitting behind
+  /* Photos fade up over the gradient placeholder already sitting behind
      them, instead of snapping in the moment they decode.
 
-     The starting opacity is applied only once JS has marked the element, so an
-     image that is already in cache when the component mounts - or a session
-     where the script never runs - is never left invisible. */
+     The starting opacity is applied only once JS has marked the element, so
+     an image that is already in cache when the component mounts - or a
+     session where the script never runs - is never left invisible. */
   .img-fade[data-loaded='false'] {
     opacity: 0;
   }
@@ -204,9 +778,6 @@ h1, h2, h3 {
    added later that forget to check, collapses to effectively instant. The
    JS side additionally skips mounting scroll observers entirely, so revealed
    content renders visible rather than fading in fast.
-
-   Colour still transitions - it is 120ms and carries no movement, and killing
-   it makes hover states snap in a way that reads as harsher, not gentler.
 --------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -220,25 +791,26 @@ h1, h2, h3 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    /* Undo layer promotion: otherwise GPU memory stays reserved for
+       elements that no longer move at all. */
+    will-change: auto !important;
   }
 
-  .btn-motion,
-  .card-motion,
-  .input-motion {
-    transition:
-      background-color var(--duration-instant) linear,
-      color var(--duration-instant) linear,
-      border-color var(--duration-instant) linear,
-      box-shadow var(--duration-instant) linear !important;
-  }
-
+  /* Transforms off entirely, not just faster - a sudden 4% image zoom is no
+     better for vestibularly sensitive users than an animated one. */
   .btn-motion:hover,
   .btn-motion:active,
-  .card-motion:hover {
+  .btn:hover,
+  .btn:active,
+  .u-card-lift:hover,
+  .u-card-interactive:hover,
+  .u-card-interactive:active,
+  .u-navitem:active {
     transform: none !important;
   }
 
-  .card-motion:hover .card-motion__media img {
+  .u-card-lift:hover .card-motion__media img,
+  .u-card-interactive:hover .card-motion__media img {
     transform: none !important;
   }
 
@@ -256,5 +828,33 @@ h1, h2, h3 {
      state is never carried by the motion alone. */
   .animate-spin {
     animation: spin 1.5s linear infinite !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WINDOWS HIGH CONTRAST / FORCED COLORS
+   box-shadow and background-image are discarded there: without this
+   block there would be no focus indicator and the gradient headlines
+   would be transparent text without a surface.
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .u-gradient-text {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+
+  /* Surfaces fall back to Canvas here - the active tab would otherwise
+     only be recognisable by font weight. */
+  .u-navitem[aria-current="page"],
+  .u-navitem[aria-pressed="true"] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
   }
 }

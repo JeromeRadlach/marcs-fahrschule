@@ -52,7 +52,7 @@ function FAQ() {
                 const panelId = `faq-panel-${faq.id}`
 
                 return (
-                  <m.div key={faq.id} {...reveal.item} className="bg-gray-dark rounded-lg">
+                  <m.div key={faq.id} {...reveal.item} className="u-card">
                     <h2 className="text-xl font-bold text-white">
                       <button
                         type="button"
@@ -60,7 +60,7 @@ function FAQ() {
                         aria-expanded={isOpen}
                         aria-controls={panelId}
                         onClick={() => toggle(faq.id)}
-                        className="flex w-full items-center justify-between gap-4 rounded-lg p-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-dark"
+                        className="flex w-full items-center justify-between gap-4 rounded-[var(--radius-3xl)] p-6 text-left"
                       >
                         <span>{faq.question}</span>
                         <m.svg
@@ -107,12 +107,16 @@ function FAQ() {
             </m.div>
 
             <m.div {...cta.group} className="mt-12">
-              <m.div {...cta.item} className="text-center bg-primary text-white p-6 rounded-lg">
-                <p className="text-lg mb-4">Haben Sie weitere Fragen?</p>
-                <a
-                  href="tel:+492013194371"
-                  className="inline-block rounded text-white hover:underline underline-offset-4 font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-                >
+              <m.div
+                {...cta.item}
+                className="u-card text-center p-6"
+                style={{
+                  borderColor: 'var(--color-primary-border-strong)',
+                  boxShadow: 'var(--shadow-sm), var(--glow-primary)'
+                }}
+              >
+                <p className="text-lg mb-4 text-gray-300">Haben Sie weitere Fragen?</p>
+                <a href="tel:+492013194371" className="btn btn-primary">
                   📞 0201/3194371
                 </a>
               </m.div>

@@ -48,25 +48,27 @@ function Aufbauseminar() {
             </m.h2>
             <m.ul {...list.group} className="space-y-4 mb-12">
               {topics.map((topic, index) => (
-                <m.li key={index} {...list.item} className="flex items-start bg-gray-dark p-4 rounded-lg">
+                <m.li key={index} {...list.item} className="u-card flex items-start p-4">
                   <span className="text-primary mr-3">✓</span>
                   <span className="text-gray-300">{topic}</span>
                 </m.li>
               ))}
             </m.ul>
 
-            <m.div {...cta.group} {...cta.item} className="bg-primary rounded-lg p-8 text-center">
+            <m.div
+              {...cta.group}
+              {...cta.item}
+              className="u-card p-8 text-center"
+              style={{
+                borderColor: 'var(--color-primary-border-strong)',
+                boxShadow: 'var(--shadow-sm), var(--glow-primary)'
+              }}
+            >
               <h3 className="text-2xl font-bold mb-4 text-white">Teilnahme möglich</h3>
-              <p className="text-white mb-6">
+              <p className="text-gray-300 mb-6">
                 Das Seminar ist für alle Führerscheinklassen ab dem Lernfahrzeugführerberechtigung möglich.
               </p>
-              {/* inline-block, not the default inline: a transform has no
-                  effect on a non-replaced inline box, so the press and lift
-                  would silently do nothing without it. */}
-              <a
-                href="tel:+492013194371"
-                className="inline-block bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-lg btn-motion"
-              >
+              <a href="tel:+492013194371" className="btn btn-primary">
                 📞 Jetzt Termin vereinbaren
               </a>
             </m.div>

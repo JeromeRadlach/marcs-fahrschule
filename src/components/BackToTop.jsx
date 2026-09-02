@@ -58,7 +58,20 @@ function BackToTop() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: DURATION.fast, ease: EASE.out }}
-            className="btn-motion fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="u-fab fixed right-4 grid place-items-center rounded-full sm:right-6"
+            style={{
+              zIndex: 'var(--z-header)',
+              /* Above the mobile tab bar; plain spacing on desktop. */
+              bottom: 'var(--fab-bottom)',
+              width: 'var(--touch-preferred)',
+              height: 'var(--touch-preferred)',
+              background: 'var(--chrome-solid)',
+              color: 'var(--color-primary-400)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)'
+              /* boxShadow lives in .u-fab - as an inline style it would
+                 overwrite the focus ring. */
+            }}
           >
             <svg
               className="h-5 w-5"
