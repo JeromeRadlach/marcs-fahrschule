@@ -2,17 +2,14 @@ import { useState } from 'react'
 import ResponsiveImage from './ResponsiveImage'
 import Lightbox from './Lightbox'
 
-// A grid photo that opens its whole card, enlarged, when clicked.
+// A grid photo that opens enlarged, on its own, when clicked.
 //
 // Drop-in replacement for ResponsiveImage at any call site where the image is
 // worth seeing whole: same props, same rendered picture, wrapped in a button.
 // A real button rather than a click handler on the image, so the photo is
 // reachable by Tab and opens on Enter and Space without any of that being
 // reimplemented.
-//
-// title is the card's heading, repeated under the enlarged photo so it is
-// still clear whose picture is on screen.
-function ZoomableImage({ slug, alt, title, sizes = '100vw', className = '' }) {
+function ZoomableImage({ slug, alt, sizes = '100vw', className = '' }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -34,7 +31,6 @@ function ZoomableImage({ slug, alt, title, sizes = '100vw', className = '' }) {
       <Lightbox
         slug={slug}
         alt={alt}
-        title={title}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />

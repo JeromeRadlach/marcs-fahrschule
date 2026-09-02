@@ -55,7 +55,6 @@ function Vehicles() {
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}
-                      title={`${vehicle.name} (${vehicle.count}x)`}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />
@@ -84,7 +83,6 @@ function Vehicles() {
                     <ZoomableImage
                       slug={vehicle.image}
                       alt={vehicle.alt}
-                      title={`${vehicle.name} (${vehicle.count}x)`}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="w-full h-full object-cover"
                     />

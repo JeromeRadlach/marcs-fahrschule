@@ -4,25 +4,20 @@ import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import ResponsiveImage from './ResponsiveImage'
 import { DURATION, EASE } from '../lib/motion'
 
-// Enlarged view of a grid card, opened by ZoomableImage.
+// Enlarged view of a grid photo, opened by ZoomableImage.
 //
 // The card in the grid crops its photo to a fixed height with object-cover, so
 // a portrait scooter or a tall portrait shot is only ever seen in part. Here
-// the same card is rebuilt at size - the whole picture with object-contain,
-// captioned with the card's heading - on the same dark panel, so it reads as
-// the card opening up rather than as a separate photo viewer.
-//
-// Only the heading comes across, not the card's body copy. The photo is the
-// point of opening this, and a full description underneath would either push
-// the picture down or make the panel scroll; the description is still on the
-// card the reader just came from.
+// the whole picture is shown with object-contain - just the photo, no panel or
+// caption; the heading and description are still on the card the reader just
+// came from.
 //
 // Rendered through a portal into document.body rather than in place. The routed
 // page wrapper in App.jsx animates a transform on every navigation, and a
 // transformed ancestor becomes the containing block for fixed positioning - the
 // overlay would be pinned to the page wrapper instead of the viewport and stop
 // covering the screen. The portal steps outside that entirely.
-function Lightbox({ slug, alt, title, isOpen, onClose }) {
+function Lightbox({ slug, alt, isOpen, onClose }) {
   const reduced = useReducedMotion()
   const closeRef = useRef(null)
 
@@ -98,7 +93,7 @@ function Lightbox({ slug, alt, title, isOpen, onClose }) {
   // The photo grows the last few percent as it arrives, which reads as the card
   // opening up rather than as a new screen replacing the old one. Under reduced
   // motion it is simply there.
-  const figureMotion = reduced
+  const photoMotion = reduced
     ? { initial: { opacity: 1 }, animate: { opacity: 1 }, exit: { opacity: 1 } }
     : {
         initial: { opacity: 0, scale: 0.94 },
@@ -132,55 +127,29 @@ function Lightbox({ slug, alt, title, isOpen, onClose }) {
           }}
         >
           {/*
-            The card, enlarged: same panel colour, same rounding, same
-            heading.
+            Just the photo, rounded like the card it came from.
 
-            The panel is sized by the photo (w-auto), not the other way round,
-            so a portrait shot gets a portrait card instead of sitting in a wide
-            panel with bars either side. That only holds while the caption stays
-            out of the width calculation - see the figcaption below.
+            sizes is close to the full viewport here, so the browser picks a
+            wider source than the card did - the point of opening it.
+
+            Both caps are in viewport units rather than percentages: nothing
+            around this image has a width of its own to resolve a percentage
+            against. The height cap matches the overlay's 1rem padding, as does
+            the width, and 48rem stops a landscape photo from spanning a wide
+            monitor edge to edge.
           */}
-          <m.figure
-            className="m-0 flex max-h-full w-auto flex-col overflow-hidden rounded-lg bg-gray-dark shadow-2xl"
-            {...figureMotion}
+          <m.div
+            className="max-h-full overflow-hidden rounded-lg shadow-2xl"
+            {...photoMotion}
             transition={fade}
           >
-            <div className="flex min-h-0 justify-center">
-              {/*
-                sizes is close to the full viewport here, so the browser picks a
-                wider source than the card did - the point of opening it.
-
-                Both caps are in viewport units rather than percentages: the
-                panel around this image has no width of its own to resolve a
-                percentage against. 70vh leaves room for the heading below even
-                on a landscape phone, the
-                width matches the overlay's 1rem padding, and 48rem stops a
-                landscape photo from spanning a wide monitor edge to edge.
-              */}
-              <ResponsiveImage
-                slug={slug}
-                alt={alt}
-                sizes="(min-width: 768px) 768px, 100vw"
-                className="h-auto max-h-[70vh] w-auto max-w-[min(48rem,calc(100vw-2rem))] object-contain"
-              />
-            </div>
-
-            {/*
-              w-0 with min-w-full is what keeps the panel the width of the
-              photo: the heading contributes nothing to the panel's intrinsic
-              width, then fills whatever width the photo settled on. Without it
-              a long name would widen the card past the picture.
-
-              Roomier padding and looser leading than the grid card because the
-              body's heavy text outline grows each glyph outward - at card
-              spacing the strokes of a wrapped heading touch.
-            */}
-            {title && (
-              <figcaption className="w-0 min-w-full p-6 text-center text-xl font-bold leading-relaxed text-white">
-                {title}
-              </figcaption>
-            )}
-          </m.figure>
+            <ResponsiveImage
+              slug={slug}
+              alt={alt}
+              sizes="(min-width: 768px) 768px, 100vw"
+              className="h-auto max-h-[calc(100vh-2rem)] w-auto max-w-[min(48rem,calc(100vw-2rem))] object-contain"
+            />
+          </m.div>
 
           <button
             ref={closeRef}
