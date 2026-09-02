@@ -2,7 +2,7 @@
 
 import { m } from 'motion/react'
 import { team, officeTeam } from '../data/team'
-import ZoomableImage from '../components/ZoomableImage'
+import ExpandableCard from '../components/ExpandableCard'
 import { useEntrance, useReveal } from '../lib/motion'
 
 function Team() {
@@ -32,26 +32,23 @@ function Team() {
           {/* Instructors */}
           <m.div {...instructorReveal.group}>
             <m.h2 {...instructorReveal.item} className="text-2xl font-bold mb-6 text-white">Fahrlehrer</m.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-8 mb-12">
               {team.map((member) => (
                 <m.div
                   key={member.id}
                   {...instructorReveal.item}
                   className="u-card u-card-lift overflow-hidden text-center"
                 >
-                  <div className="card-motion__media bg-gradient-to-br from-primary to-primary-dark">
-                    <ZoomableImage
-                      slug={member.image}
-                      alt={member.alt}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="w-full h-auto"
-                    />
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-black/50 backdrop-blur-sm p-6">
-                    <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
-                    <p className="text-primary font-medium mb-3">{member.role}</p>
+                  <ExpandableCard
+                    slug={member.image}
+                    alt={member.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    heading={member.name}
+                    className="text-center"
+                  >
+                    <p className="text-primary font-medium text-sm mb-1">{member.role}</p>
                     <p className="text-gray-300 text-sm">{member.description}</p>
-                  </div>
+                  </ExpandableCard>
                 </m.div>
               ))}
             </div>
@@ -60,26 +57,23 @@ function Team() {
           {/* Office Team */}
           <m.div {...officeReveal.group}>
             <m.h2 {...officeReveal.item} className="text-2xl font-bold mb-6 text-white">Büro & Organisation</m.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-8">
               {officeTeam.map((member) => (
                 <m.div
                   key={member.id}
                   {...officeReveal.item}
                   className="u-card u-card-lift overflow-hidden text-center"
                 >
-                  <div className="card-motion__media bg-gradient-to-br from-primary to-primary-dark">
-                    <ZoomableImage
-                      slug={member.image}
-                      alt={member.alt}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="w-full h-auto"
-                    />
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-black/50 backdrop-blur-sm p-6">
-                    <h3 className="text-xl font-bold mb-2 text-white">{member.name}</h3>
-                    <p className="text-primary font-medium mb-3">{member.role}</p>
+                  <ExpandableCard
+                    slug={member.image}
+                    alt={member.alt}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    heading={member.name}
+                    className="text-center"
+                  >
+                    <p className="text-primary font-medium text-sm mb-1">{member.role}</p>
                     <p className="text-gray-300 text-sm">{member.description}</p>
-                  </div>
+                  </ExpandableCard>
                 </m.div>
               ))}
             </div>

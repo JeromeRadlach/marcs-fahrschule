@@ -57,6 +57,22 @@ const nextConfig = {
   // could never run, and the warning is confined to dev, where the rule works.
   ...(process.env.NODE_ENV === 'development'
     ? {
+        // Landing on bare localhost:3000 would otherwise 404, because dev
+        // serves the site under the same subpath GitHub Pages does. Forward
+        // to the start page instead of leaving a dead root.
+        async redirects() {
+          return basePath
+            ? [
+                {
+                  source: '/',
+                  destination: basePath,
+                  basePath: false,
+                  permanent: false
+                }
+              ]
+            : []
+        },
+
         async rewrites() {
           return [
             {
